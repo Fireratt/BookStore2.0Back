@@ -23,16 +23,14 @@ import org.springframework.context.ApplicationContext;
 public class DemoApplication {
 	@Autowired
 		private AccessBook accessBook ;
+
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "bad request")
 	public class HttpException extends RuntimeException
 	{
 
 	}
-	@RequestMapping("/Home")
-	String home(){
-		return "HELLO WORLD!" ;   
 
-	}
+
 	// @CrossOrigin
 	@GetMapping("/Book")
 	public Book bookController(@RequestParam Map<String,String> book)
@@ -111,6 +109,15 @@ public class DemoApplication {
 		ret.put("Amount" , BookAmount) ; 
 		return ret ; 
 	}
+
+	@PostMapping("/login")
+	public String confirmLogin(@RequestBody Map<String,String> Account)
+	{
+		String userName = Account.get("username") ;
+		String password = Account.get("password") ;  
+		return "1" ; 
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	} 
