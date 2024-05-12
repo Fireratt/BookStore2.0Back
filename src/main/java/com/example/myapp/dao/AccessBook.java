@@ -41,10 +41,14 @@ public class AccessBook {
         }
     }
     // just return the bookInfo's key 
-    public Book getBookInfo(int bookId)
+    public Book getBookInfo(String bookId)
     {
-        String sql = "select * from book where book_id = " + bookId ; 
-        Map<String,Object> temMap = jdbcTemplate.queryForMap(sql) ; 
+        String sql = "select * from book where book_id = ?" ;
+        Map<String,Object> temMap = jdbcTemplate.queryForMap(sql , 
+        new Object[]
+        {
+            bookId
+        }) ; 
         Book ret = new Book(Integer.parseInt(temMap.get("Book_Id").toString())
         ,temMap.get("Name").toString()
         ,temMap.get("Author").toString()
@@ -57,21 +61,29 @@ public class AccessBook {
 
     public Book_Basic[] getBookList(int pageNum)
     {
+        // check the session 
+
         // page start from 1 
         String sql = "select * from book where book_id >=" +  (pageNum-1) * MAXBOOKNUM ; 
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql) ; 
-        Book_Basic[] ret = new Book_Basic[MAXBOOKNUM];
+        
+        Book_Basic[] results = new Book_Basic[MAXBOOKNUM];
         int cnt = 0 ; 
         while(rs.next() && cnt < MAXBOOKNUM)
         {
             String id = rs.getString("book_id") ; 
             String name = rs.getString("name") ; 
             Double price = rs.getDouble("price") ;
-            ret[cnt] = new Book_Basic(Integer.parseInt(id),name,price) ;  
+            results[cnt] = new Book_Basic(Integer.parseInt(id),name,price) ;  
             cnt = cnt + 1 ; 
         }
-
-        return ret ; 
+        // dont return the null 
+        Book_Basic[] result = new Book_Basic[cnt];
+        for(int i = 0 ; i < cnt ; i++)
+        {
+            result[i] = results[i] ; 
+        }
+        return result ; 
     }
 
     @Autowired

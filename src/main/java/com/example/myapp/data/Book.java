@@ -3,9 +3,9 @@ package com.example.myapp.data ;
 import com.example.myapp.data.Book_Basic;
 public class Book extends Book_Basic
 {
-    public int Book_Id ; 
-	public String Name ; 
-    public double Price ; 
+    // public int Book_Id ; 
+	// public String Name ; 
+    // public double Price ; 
 	public String Author ; 
 	public String Description ; 
 	

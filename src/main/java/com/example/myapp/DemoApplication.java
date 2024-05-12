@@ -25,32 +25,13 @@ public class DemoApplication {
 		private AccessBook accessBook ;
 
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "bad request")
-	public class HttpException extends RuntimeException
+	public static class HttpException extends RuntimeException
 	{
 
 	}
 
 
-	// @CrossOrigin
-	@GetMapping("/Book")
-	public Book bookController(@RequestParam Map<String,String> book)
-	{
-		System.out.println(book.get("Name")) ; 
-		System.out.println(book.get("id")) ; 
-		// booklist save all the book's information . And call the find method to get it according the name 
-		System.out.println(BookList.find(book.get("Name"))) ; 
-		Book ret = BookList.find(book.get("Name")) ; 
-		if(ret == null)
-		{
-			System.out.println("ERROR , NULL NAME!") ; 
-		 throw new HttpException() ; 
-		} 
-		// insert the book to the database when develop
-		// accessBook.addBook(ret);
-		System.out.println("SUCCESS") ; 
-		return ret ; 
 
-	}
 	@GetMapping("/order")
 	// public ResponseEntity<Order[]> orderController()
 	public Order[] orderController()
@@ -110,13 +91,6 @@ public class DemoApplication {
 		return ret ; 
 	}
 
-	@PostMapping("/login")
-	public String confirmLogin(@RequestBody Map<String,String> Account)
-	{
-		String userName = Account.get("username") ;
-		String password = Account.get("password") ;  
-		return "1" ; 
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
