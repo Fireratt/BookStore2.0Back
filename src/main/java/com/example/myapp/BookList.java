@@ -67,7 +67,7 @@ public class BookList {
             2220
         ),
     } ; 
-    static Book find(String name)
+    public static Book find(String name)
     {
         for (int i = 0 ; i < size ; i++)
         {

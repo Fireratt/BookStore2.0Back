@@ -29,7 +29,8 @@ public class BookController {
     @GetMapping("/book")
 	public Book bookInfo(@RequestParam Map<String,String> book)
 	{
-        String bookId = book.get("id") ; 
+		// String bookName = book.get("Name") ; 
+        int bookId = Integer.parseInt(book.get("id")) ; 
 		System.out.println(book.get("id")) ; 
 		// booklist save all the book's information . And call the find method to get it according the name 
         Book ret = accessBook.getBookInfo(bookId) ; 
@@ -39,6 +40,7 @@ public class BookController {
 		    throw new DemoApplication.HttpException() ; 
 		} 
 		// insert the book to the database when develop
+		// Book ret = BookList.find(bookName); 
 		// accessBook.addBook(ret);
 		System.out.println("SUCCESS") ; 
 		return ret ; 

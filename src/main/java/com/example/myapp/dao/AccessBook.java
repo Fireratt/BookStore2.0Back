@@ -41,7 +41,7 @@ public class AccessBook {
         }
     }
     // just return the bookInfo's key 
-    public Book getBookInfo(String bookId)
+    public Book getBookInfo(int bookId)
     {
         String sql = "select * from book where book_id = ?" ;
         Map<String,Object> temMap = jdbcTemplate.queryForMap(sql , 
