@@ -48,7 +48,7 @@ public class OrderController
             OrderItem newItem = new OrderItem(book_id, bookInfo.Name, bookInfo.Price, amount) ;
             orderItems.add(newItem) ; 
         }
-        Order newOrder = new Order(-1, -1, orderItems, null) ; 
+        Order newOrder = new Order(-1, -1, orderItems, "") ; 
         boolean result = orderService.put(newOrder, request) ; 
         HashMap<String,String> ret = new HashMap<>() ; 
         if(result)
@@ -59,4 +59,26 @@ public class OrderController
             }
         return ret ; 
     }
+    // the paid info
+    @PostMapping("/pay")
+	public Map<String,String>[] queryController(@RequestBody List<Map<String,String>> request)
+	{
+        int len = request.size() ; 
+        Map<String,String>[] items = new Map[len] ; 
+        for(int i = 0 ; i < len ; i++)
+        {
+            Map<String,String> singleBook = request.get(i) ; 
+            int book_id =Integer.parseInt(singleBook.get("book_id")) ; 
+            String BookAmount = singleBook.get("amount") ; 
+            System.out.println(singleBook.get("book_id")) ; 
+            Book bookInfo = accessBook.getBookInfo(book_id) ; 
+            HashMap<String,String> ret = new HashMap<String,String>() ; 
+            ret.put("book_id","" +  book_id) ; 
+            ret.put("Name" ,"" +  bookInfo.Name) ; 
+            ret.put("Price" ,"" + bookInfo.Price) ; 
+            ret.put("amount" , BookAmount) ; 
+            items[i] = ret ; 
+        }
+        return items ; 
+	}
 }

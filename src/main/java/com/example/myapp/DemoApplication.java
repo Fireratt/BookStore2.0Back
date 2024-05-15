@@ -68,22 +68,7 @@ public class DemoApplication {
 	// 	return ret ; 
 	// }
 	// handle pay item information query 
-	@GetMapping("/pay")
-	public Map<String,String> queryController(@RequestParam Map<String,String> request)
-	{
-		String bookName = request.get("Name") ; 
-		String BookAmount = request.get("Amount") ; 
-		System.out.println(request.get("Name")) ; 
-		Book bookInfo = BookList.find(bookName) ; 
-		HashMap<String,String> ret = new HashMap<String,String>() ; 
-		ret.put("Name" ,"" +  bookInfo.Name) ; 
-		ret.put("Code" , "1") ; 
-		ret.put("Paid" , "" +bookInfo.Real_Price) ; 
-		ret.put("Price" ,"" + bookInfo.Price) ; 
-		ret.put("Date" , "1970/1/1") ; 
-		ret.put("Amount" , BookAmount) ; 
-		return ret ; 
-	}
+
 
 
 	public static void main(String[] args) {

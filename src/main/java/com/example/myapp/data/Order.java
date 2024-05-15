@@ -17,7 +17,7 @@ public class Order {
         if(iDate == "")
         {
             Date date = new Date() ; 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd") ; 
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd") ; 
             setDate(formatter.format(date));
         }
         else
@@ -37,9 +37,10 @@ public class Order {
             totalPrice = totalPrice + item.getAmount() *item.getPrice() ; 
         }
     }
-    // append the orderItem 
+    // append the orderItem ; recalculate the price
     public void insertOrderItem(OrderItem newItem)
     {
+        totalPrice = totalPrice + newItem.getAmount() *newItem.getPrice() ; 
         orderItems.add(newItem) ; 
     }
 }

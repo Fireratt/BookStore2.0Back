@@ -1,6 +1,8 @@
 package com.example.myapp.dao; 
 
-import org.springframework.stereotype.* ; 
+import org.springframework.stereotype.* ;
+
+import java.lang.reflect.Array;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,7 @@ public class AccessOrder{
             int amount = orders.getInt("amount") ; 
             double price = orders.getDouble("price") ; 
             String order_time = orders.getString("order_time") ; 
-            String book_name = orders.getString("name") ; 
+            String book_name = orders.getString("name") ;   // read the result
             if(previousId==order_id)    // a old order
             {
                 OrderList[i].insertOrderItem(new OrderItem(book_id,book_name,price , amount)) ; 
@@ -53,23 +55,27 @@ public class AccessOrder{
                 ArrayList<OrderItem> orderitems = new ArrayList<OrderItem>() ; 
                 orderitems.add( new OrderItem(book_id,book_name,price , amount)) ; 
                 OrderList[i+1] = new Order(order_id , user_id , orderitems , order_time) ; 
+                previousId = order_id ;
                 i = i + 1 ; 
             }
         }
-        return OrderList ; 
+        return Arrays.copyOfRange(OrderList, 0, i+1) ; 
     }
 
     public boolean addOrder(int user_id , Order entity) 
     {
         try
         {
-            String orderSql = "Insert into order(user_id , order_time) values(?,?) ; " ;     // first is userid , second is time ; 
+            String orderSql = "Insert into bookdb.order(user_id , order_time) values(?,?) " ;     // first is userid , second is time ; 
             String getId = "SELECT LAST_INSERT_ID() as lastId" ; 
-            String itemSql = "Insert into orderitem(order_id,book_id,amount) values(?,?,?)" ; 
+            String itemSql = "Insert into bookdb.orderitem(order_id,book_id,amount) values(?,?,?)" ; 
             String sql = orderSql + getId ; 
-            int orderId = Integer.parseInt( jdbcTemplate.queryForMap(sql,
+
+            jdbcTemplate.update(orderSql,
                 new Object[]
                 { user_id , entity.getDate()}
+                ) ; 
+                int orderId = Integer.parseInt( jdbcTemplate.queryForMap(getId
                 ).get("lastId").toString() ) ; 
             int size = entity.getOrderItems().size() ; 
             System.out.println("AddOrder:" + size);

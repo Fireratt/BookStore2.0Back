@@ -35,7 +35,6 @@ public class CartController {
         else
         {
             ret.put("State" , "false") ; 
-
         }
         return ret ; 
     }
