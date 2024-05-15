@@ -32,7 +32,7 @@ public class AccessCart{
 
     public void removeCart(int userId,int bookId )
     {
-        String sql = "delete from cart where userId=" + userId + " and " +"bookId=" + bookId ;  
+        String sql = "delete from cart where user_id=" + userId + " and " +"book_id=" + bookId ;  
         jdbcTemplate.update(sql) ; 
     }
     

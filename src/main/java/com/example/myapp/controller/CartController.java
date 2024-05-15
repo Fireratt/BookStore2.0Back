@@ -44,7 +44,14 @@ public class CartController {
     {
         HashMap<String,String> ret = new HashMap<String , String>() ; 
         int book_id =Integer.parseInt(body.get("book_id")) ; 
-        cartService.del(book_id, request) ; 
+        if(cartService.del(book_id, request))
+        {
+            ret.put("State" , "true") ; 
+        }
+        else
+        {
+            ret.put("State" , "false") ; 
+        }
         return ret ; 
     }
 }
