@@ -16,6 +16,7 @@ public class OrderItem {
     private int book_id ; 
     @Id 
     @Column(name = "orderitem_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderitem_id ; 
 
 

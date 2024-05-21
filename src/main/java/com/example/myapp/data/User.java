@@ -1,5 +1,4 @@
 package com.example.myapp.data ; 
-import java.util.Map;
 import java.util.*;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,11 +8,11 @@ import lombok.Data;
 public class User {
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id ; 
 
     @Basic
     @Column(name = "name")
-
     private String username ; 
     private String date ; 
     private String phone ; 
@@ -21,6 +20,7 @@ public class User {
     @Basic
     @Column(name= "mail")
     private String mail ; 
+
     public User(Map<String,Object> data)
     {
         id = data.get("userid").toString() ; 

@@ -5,11 +5,12 @@ import lombok.Data;
 @Data
 public class UserAuth {
     @Id
-    @Column(name="user_id")
+    @Column(name="user_id" , insertable = false, updatable = false)
     private String user_id ;
 
     @Column(name="password")
     private String password ; 
+
     public UserAuth(String user_id) 
     {
         this.user_id = user_id ; 

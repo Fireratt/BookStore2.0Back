@@ -19,7 +19,8 @@ public class AccountController {
 		System.out.println("Get Request:" + userName+ ":" + password);
 		HashMap<String,String> ret = new HashMap<>() ; 
 		String user_id = accessAccount.confirmLogin(userName, password); 
-        if(user_id !="")
+		System.out.println("Result" + user_id);
+        if(user_id != null)
 		{
 			ret.put("State", "Success") ; 
 			SessionUtils.setSession(new UserAuth(user_id), request);
@@ -39,8 +40,9 @@ public class AccountController {
 		String password = newAccount.get("password") ;  
 		String mail = newAccount.get("mail") ;  
 
-		accessAccount.register(userName, password, mail);
-
+		accessAccount.register(userName,mail);
+		int userId = accessAccount.getNewUserId() ; 
+		accessAccount.saveAuth(userId, password);
 		HashMap<String,String> ret = new HashMap<>() ; 
 		ret.put("State", "Success") ; 
 		return ret ; 

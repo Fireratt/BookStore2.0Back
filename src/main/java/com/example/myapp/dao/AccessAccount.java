@@ -18,7 +18,10 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException ;
 // import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration ;
 // import java.sql.*;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.myapp.data.User;
@@ -85,8 +88,19 @@ import com.example.myapp.data.User;
 //         this.jdbcTemplate = jdbc;
 //     }
 // }
-public interface AccessAccount extends JpaRepository<UserAuth , Integer>{
+public interface AccessAccount extends JpaRepository<User , Integer>{
 
-    @Query(value = "")
+    @Query(value="select b.user_id from (select * from user where name = ?1) a join userauth b on a.user_id = b.user_id where b.pwd = ?2" , nativeQuery = true)
     public String confirmLogin(String userName , String password) ; 
+    
+    @Modifying
+    @Transactional
+    @Query(value="insert into User(username,mail) values(?1 , ?2)")
+    public void register(String username, String mail) ; 
+
+    @Query(value="SELECT LAST_INSERT_ID() as lastId" , nativeQuery = true) 
+    int getNewUserId() ;
+
+    @Query(value="insert into userauth(user_id,pwd) values(?1 , ?2)", nativeQuery = true)
+    public void saveAuth(int user_id , String pwd) ; 
 }

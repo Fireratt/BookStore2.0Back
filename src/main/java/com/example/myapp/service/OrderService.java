@@ -18,7 +18,8 @@ public class OrderService implements com.example.myapp.service.Service
 {
     @Autowired
     AccessOrder accessOrder;
-
+    @Autowired
+    AccessCart accessCart ; 
     public Order[] getList(HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
@@ -61,7 +62,9 @@ public class OrderService implements com.example.myapp.service.Service
             for(int i = 0 ; i < itemNum ; i++)
             {
                 accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount()) ;  
+                accessCart.deleteByIds(user_id, items.get(i).getBook_id()) ; 
             }
+        
             return true ; 
         }
         return false ; 

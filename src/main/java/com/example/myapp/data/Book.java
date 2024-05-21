@@ -9,6 +9,7 @@ public class Book extends Book_Basic
 {
 	@Id 
 	@Column(name="book_id") 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bookId ; 
 
 	@Column(name="author") 
