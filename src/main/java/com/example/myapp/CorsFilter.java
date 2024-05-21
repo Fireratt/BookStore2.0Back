@@ -25,6 +25,7 @@ public class CorsFilter implements jakarta.servlet.Filter {
         // response.setHeader("Access-Control-Allow-Headers", "*");
         chain.doFilter(req, response);
     }
+    
     @Override
     public void destroy() {
     }

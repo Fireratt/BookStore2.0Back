@@ -71,7 +71,7 @@ public class BookList {
     {
         for (int i = 0 ; i < size ; i++)
         {
-            if(name.equals(Books[i].Name))
+            if(name.equals(Books[i].getName()))
             {
                 return Books[i] ; 
             }

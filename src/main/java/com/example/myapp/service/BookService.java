@@ -1,6 +1,6 @@
-package com.example.myapp.service ;
-
-import com.example.myapp.dao.AccessCart;
+package com.example.myapp.service;
+import com.example.myapp.dao.AccessBook;
+import com.example.myapp.data.Book;
 import com.example.myapp.data.Cart;
 import com.example.myapp.utils.SessionUtils;
 
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.* ; 
 @Service
-public class CartService implements com.example.myapp.service.Service{
+public class BookService implements com.example.myapp.service.Service{
     @Autowired
-    AccessCart accessCart ;
-
+    AccessBook accessBook ; 
+    final int PAGE_SIZE = 10 ; 
     public boolean del(Object entity, HttpServletRequest request)
     {
         if(entity instanceof Integer)
@@ -22,7 +22,7 @@ public class CartService implements com.example.myapp.service.Service{
             int result = (int)entity ; 
             int user_id = SessionService.getUserId(request) ; 
             try{
-                accessCart.deleteByIds(user_id, result);
+                accessBook.deleteById(result);
             }
             catch(Exception err)
             {
@@ -36,12 +36,12 @@ public class CartService implements com.example.myapp.service.Service{
 
     public boolean put(Object entity, HttpServletRequest request)
     {
-        if(entity instanceof Integer)
+        if(entity instanceof Book)
         {
-            int result = (int)entity ; 
+            Book result = (Book)entity ; 
             int user_id = SessionService.getUserId(request) ;
             try{
-                accessCart.save(user_id , result) ;
+                accessBook.save(result) ;
             }
             catch(Exception err)
             {
@@ -54,29 +54,28 @@ public class CartService implements com.example.myapp.service.Service{
         return false ; 
     }
 
-    public Cart get(Object entity, HttpServletRequest request)
+    public Book get(Object entity, HttpServletRequest request)
     {
-        if(entity instanceof Cart)
+        if(entity instanceof Integer)
         {
-            Cart ret = (Cart)entity ; 
+            Book ret = accessBook.findByBookId((Integer)entity) ; 
             return ret ; 
         }
         return null ; //false
     }
 
-    public Cart[] getList(HttpServletRequest request)
+    public Book[] getList(HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
-        Cart[] ret ;
+        Book[] ret ;
         try{
-            ret = accessCart.findByUserId(user_id) ;
+            ret = accessBook.findByPage(1*PAGE_SIZE) ;
             
-            System.out.println(ret[0].getUserId()) ;
         }
         catch(Exception err)
         {
             System.err.println(err);
-            return new Cart[]{}; 
+            return new Book[]{}; 
         }
         return ret ; 
     }

@@ -1,4 +1,5 @@
 package com.example.myapp.data ; 
+
 // this class just contain part of the Book.java ; it is the basic information for a book
 public class Book_Basic {
     public int Book_Id ; 
@@ -9,5 +10,8 @@ public class Book_Basic {
         this.Book_Id = Book_Id ; 
         this.Name = iName ; 
         this.Price = iPrice ; 
+    }
+    public Book_Basic(){
+
     }
 }

@@ -3,11 +3,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import lombok.Data;
 import java.util.Date;
-
+import jakarta.persistence.*;
+@Entity 
 @Data
 public class Order {
+    @Id
+    @Column(name="order_id")
     private int order_id ; 
+    
+    @Basic
+    @Column(name="user_id")
     private int user_id ; 
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "orderitem" , 
+        joinColumns = {@JoinColumn(name = "")})
     private ArrayList<OrderItem> orderItems ; 
     private double totalPrice ;        // will calculated when initialized 
     private String date ;           // YYYY-MM-DD , automatically generated

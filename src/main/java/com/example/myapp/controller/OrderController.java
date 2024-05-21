@@ -13,6 +13,7 @@ import com.example.myapp.data.Cart;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.OrderItem;
 import com.example.myapp.data.UserAuth;
+import com.example.myapp.service.BookService;
 import com.example.myapp.service.CartService;
 import com.example.myapp.service.OrderService;
 import com.example.myapp.utils.SessionUtils;
@@ -25,7 +26,7 @@ public class OrderController
     @Autowired
     OrderService orderService ; 
     @Autowired
-    AccessBook accessBook ; 
+    BookService accessBook ; 
     @GetMapping("/order")
     public Order[] getOrderList(HttpServletRequest request)
     {
@@ -44,8 +45,8 @@ public class OrderController
             System.out.println("AddOrder::" + book_id);
             int amount = Integer.parseInt(singleBook.get("amount")) ; 
             System.out.println(amount);
-            Book bookInfo = accessBook.getBookInfo(book_id) ; 
-            OrderItem newItem = new OrderItem(book_id, bookInfo.Name, bookInfo.Price, amount) ;
+            Book bookInfo = accessBook.get(book_id , request) ; 
+            OrderItem newItem = new OrderItem(book_id, bookInfo.getName(), bookInfo.getPrice(), amount) ;
             orderItems.add(newItem) ; 
         }
         Order newOrder = new Order(-1, -1, orderItems, "") ; 
@@ -61,21 +62,21 @@ public class OrderController
     }
     // the paid info
     @PostMapping("/pay")
-	public Map<String,String>[] queryController(@RequestBody List<Map<String,String>> request)
+	public Map<String,String>[] queryController(@RequestBody List<Map<String,String>> requestBody , HttpServletRequest request)
 	{
-        int len = request.size() ; 
+        int len = requestBody.size() ; 
         Map<String,String>[] items = new Map[len] ; 
         for(int i = 0 ; i < len ; i++)
         {
-            Map<String,String> singleBook = request.get(i) ; 
+            Map<String,String> singleBook = requestBody.get(i) ; 
             int book_id =Integer.parseInt(singleBook.get("book_id")) ; 
             String BookAmount = singleBook.get("amount") ; 
             System.out.println(singleBook.get("book_id")) ; 
-            Book bookInfo = accessBook.getBookInfo(book_id) ; 
+            Book bookInfo = accessBook.get(book_id , request) ; 
             HashMap<String,String> ret = new HashMap<String,String>() ; 
             ret.put("book_id","" +  book_id) ; 
-            ret.put("Name" ,"" +  bookInfo.Name) ; 
-            ret.put("Price" ,"" + bookInfo.Price) ; 
+            ret.put("Name" ,"" +  bookInfo.getName()) ; 
+            ret.put("Price" ,"" + bookInfo.getPrice()) ; 
             ret.put("amount" , BookAmount) ; 
             items[i] = ret ; 
         }

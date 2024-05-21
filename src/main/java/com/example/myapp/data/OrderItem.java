@@ -3,8 +3,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import lombok.Data;
 import java.util.Date;
+import jakarta.persistence.*;
+@Entity 
 @Data
 public class OrderItem {
+
+    @Id 
+    @Column(name = "orderitem_id")
+    private int orderitem_id ; 
+    
     private int book_id ; 
     private String BookName ; 
     private double Price ; 
@@ -16,5 +23,6 @@ public class OrderItem {
         BookName = bookName ; 
         Price = price ; 
         Amount = amount ;
+        orderitem_id = 0 ; 
     } ; 
 }

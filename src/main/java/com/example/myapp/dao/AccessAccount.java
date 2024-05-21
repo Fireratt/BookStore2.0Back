@@ -2,19 +2,22 @@ package com.example.myapp.dao;
 
 import org.springframework.stereotype.* ;
 
-import java.io.Console;
+// import java.io.Console;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate ; 
-import com.example.myapp.BookList;
-import com.example.myapp.data.Book;
-import org.springframework.dao.DataAccessException; 
+// import com.example.myapp.BookList;
+// import com.example.myapp.data.Book;
+// import org.springframework.dao.DataAccessException; 
 import org.springframework.dao.IncorrectResultSizeDataAccessException ; 
 
-import javax.annotation.Resource;
-import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration ;
-import java.sql.*;
+// import javax.annotation.Resource;
+// import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration ;
+// import java.sql.*;
+import jakarta.persistence.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 @Repository
 public class AccessAccount {
     @Autowired

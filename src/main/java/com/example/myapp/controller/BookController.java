@@ -10,6 +10,7 @@ import com.example.myapp.dao.AccessBook;
 import com.example.myapp.data.Book;
 import com.example.myapp.data.Book_Basic;
 import com.example.myapp.data.UserAuth;
+import com.example.myapp.service.BookService;
 import com.example.myapp.utils.SessionUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +18,23 @@ import jakarta.servlet.http.* ;
 @RestController
 public class BookController {
     @Autowired 
-    AccessBook accessBook ; 
+    BookService accessBook ; 
 
     @GetMapping("/booklist")
     public Book_Basic[] bookList(HttpServletRequest request)
     {
         System.out.println(SessionUtils.readSession("user_id", request)) ; 
-        return accessBook.getBookList(1) ; 
+        return accessBook.getList(request) ; 
     }
 
     @GetMapping("/book")
-	public Book bookInfo(@RequestParam Map<String,String> book)
+	public Book bookInfo(@RequestParam Map<String,String> book , HttpServletRequest request)
 	{
 		// String bookName = book.get("Name") ; 
         int bookId = Integer.parseInt(book.get("id")) ; 
 		System.out.println(book.get("id")) ; 
 		// booklist save all the book's information . And call the find method to get it according the name 
-        Book ret = accessBook.getBookInfo(bookId) ; 
+        Book ret = accessBook.get(bookId , request) ; 
 		if(ret == null)
 		{
 			System.out.println("ERROR , NULL NAME!") ; 
@@ -46,5 +47,6 @@ public class BookController {
 		return ret ; 
 
 	}
+	
 }
 
