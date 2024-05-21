@@ -7,7 +7,7 @@ public class SessionUtils {
     {
         HttpSession session = request.getSession() ; 
 
-        session.setAttribute("user_id", userAuth.user_id);
+        session.setAttribute("user_id", userAuth.getUser_id());
     }
     public static String readSession(String attribute,HttpServletRequest request)
     {

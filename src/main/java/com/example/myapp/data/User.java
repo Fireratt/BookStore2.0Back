@@ -40,4 +40,9 @@ public class User {
         data.put("mail" , mail) ; 
         return data ; 
     }
+
+    public User()
+    {
+        
+    }
 }

@@ -6,21 +6,24 @@ import java.util.Date;
 import jakarta.persistence.*;
 @Entity 
 @Data
+@Table(name="order_")
 public class Order {
     @Id
     @Column(name="order_id")
-    private int order_id ; 
+    @GeneratedValue
+    private int orderId ; 
     
     @Basic
     @Column(name="user_id")
-    private int user_id ; 
+    private int userId ; 
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "orderitem" , 
-        joinColumns = {@JoinColumn(name = "")})
-    private ArrayList<OrderItem> orderItems ; 
-    private double totalPrice ;        // will calculated when initialized 
+    @Column(name = "order_time")
     private String date ;           // YYYY-MM-DD , automatically generated
+    @Transient
+    private ArrayList<OrderItem> orderItems ; 
+    @Transient
+    private double totalPrice ;        // will calculated when initialized 
+ 
     public Order(int order_id , int user_id ,ArrayList<OrderItem> orderItems , String iDate)
     {
         // pass empty Date , initialize the date ; 
@@ -35,8 +38,8 @@ public class Order {
             setDate(iDate);
         }
 
-        setOrder_id(order_id);
-        setUser_id(user_id);
+        setOrderId(order_id);
+        setUserId(user_id);
         setOrderItems(orderItems);
 
         int size = orderItems.size() ; 
@@ -52,5 +55,10 @@ public class Order {
     {
         totalPrice = totalPrice + newItem.getAmount() *newItem.getPrice() ; 
         orderItems.add(newItem) ; 
+    }
+
+    Order()
+    {
+        orderItems = new ArrayList<>();
     }
 }
