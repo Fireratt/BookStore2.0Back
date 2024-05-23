@@ -11,7 +11,16 @@ public class SessionUtils {
     }
     public static String readSession(String attribute,HttpServletRequest request)
     {
-        HttpSession session = request.getSession() ; 
-        return session.getAttribute(attribute).toString() ; 
+        HttpSession session = request.getSession(false) ; 
+        Object result = null; 
+        if(session != null)
+        {        
+            result = session.getAttribute(attribute) ; 
+        }
+        if(result == null)
+        {
+            return "" ; 
+        }
+        return result.toString() ; 
     }
 }
