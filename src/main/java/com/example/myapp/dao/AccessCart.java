@@ -75,7 +75,8 @@ import com.example.myapp.data.Book;
 
 public interface AccessCart extends JpaRepository<Cart,Integer>{
 
-    @Query(value="select a.user_id , a.book_id , b.price , b.name from cart a join book b on a.book_id = b.book_id where user_id = ?1 ", nativeQuery = true)
+    // @Query(value="select a.user_id , a.book_id , b.price , b.name from cart a join book b on a.book_id = b.book_id where user_id = ?1 ", nativeQuery = true)
+    @Query(value="select c from Cart c where c.userId = ?1 ", nativeQuery = false)
     Cart[] findByUserId(int user_id) ; 
 
     @Modifying

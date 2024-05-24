@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.example.myapp.data.Order;
 import jakarta.servlet.http.* ; 
 import com.example.myapp.data.OrderItem;
-import java.util.ArrayList;
+import com.example.myapp.dto.Order_dto;
+
+import java.util.*;
 @Service
 public class OrderService implements com.example.myapp.service.Service
 {
@@ -20,33 +22,35 @@ public class OrderService implements com.example.myapp.service.Service
     AccessOrder accessOrder;
     @Autowired
     AccessCart accessCart ; 
-    public Order[] getList(HttpServletRequest request)
+    public Order_dto[] getList(HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
         Order[] ret ;
-        try{
+        // try{
             ret = accessOrder.getOrderList(user_id) ;
+            String result = ret[0].toString() ; 
             int length = ret.length ;
-            for(int i = 0 ; i < length ; i++ )
-            {
-                String[] items = accessOrder.getOrderItem(ret[i].getOrderId()) ;
-                int itemNumber = items.length ;  
-                for(int j = 0 ; j < itemNumber ; j++)
-                {
-                    OrderItem single = new OrderItem(items[j]) ; 
-                    ret[i].insertOrderItem(single);
-                }
-                // ret[i].setOrderItems(OrderItems);
-            }
-        }
-        catch(Exception err)
-        {
-            System.err.println(err);
-            return new Order[]{}; 
-        }
-        return ret ; 
-    }
+            int cnt = 1 ; 
+            Order_dto[] orderList = new Order_dto[length] ; 
+            System.out.println("Get orderList end,result :" + result);
 
+            for (int i = 0 ; i < length ; i++) {
+                // orderList[cnt] = order.toDto() ;  
+                Order ret2 = ret[i] ; 
+                orderList[i] = ret2.toDto() ;
+            }
+            return orderList ; 
+        // }
+        // catch(Exception err)
+        // {
+        //     StackTraceElement stackInfo = err.getStackTrace()[0] ; 
+        //     System.err.println(err + stackInfo.getClassName() + ":" 
+        //     + stackInfo.getMethodName() + ":" + stackInfo.getLineNumber());
+        //     return new Order_dto[]{} ;  
+        // }
+        // return new Order_dto[]{} ;  
+
+    }
     public boolean put(Object entity , HttpServletRequest request) 
     {
         if(entity instanceof Order)
@@ -56,12 +60,12 @@ public class OrderService implements com.example.myapp.service.Service
             result.setUserId(user_id);
             accessOrder.save(user_id,result.getDate()) ;
             int orderId = accessOrder.getNewOrderId() ; 
-            ArrayList<OrderItem> items = result.getOrderItems() ; 
+            List<OrderItem> items = result.getOrderItems() ; 
 
             int itemNum = items.size() ; 
             for(int i = 0 ; i < itemNum ; i++)
             {
-                accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount()) ;  
+                accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount() ,(int)items.get(i).getPrice()) ;  
                 accessCart.deleteByIds(user_id, items.get(i).getBook_id()) ; 
             }
         

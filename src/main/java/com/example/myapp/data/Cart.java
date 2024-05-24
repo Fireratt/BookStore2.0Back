@@ -1,4 +1,6 @@
 package com.example.myapp.data;
+import com.example.myapp.dto.Cart_dto;
+
 import jakarta.persistence.*;
 import lombok.Data;
 @Data
@@ -14,23 +16,23 @@ public class Cart extends Object{
     @Column(name = "book_id")
     private int bookId ; 
 
-    @Basic
-    @Column(name = "price")
-    private double bookPrice ; 
+    @ManyToOne(fetch = FetchType.EAGER , cascade =  CascadeType.REFRESH)
+    @JoinColumn(name = "book_id")
+    private Book book ; 
 
-    @Basic
-    @Column(name = "name")
-    private String bookName ;
-    public Cart(int userId, int bookId , double bookPrice , String bookName)
+    public Cart(int userId, int bookId)
     {
         this.bookId = bookId ; 
-        this.bookPrice = bookPrice ; 
         this.userId = userId ; 
-        this.bookName = bookName; 
     }
 
     public Cart()
     {
         
+    }
+
+    public Cart_dto toCart_dto()
+    {
+        return new Cart_dto(userId, bookId, book.getPrice(), book.getName()) ; 
     }
 }

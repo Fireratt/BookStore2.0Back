@@ -13,6 +13,7 @@ import com.example.myapp.data.Cart;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.OrderItem;
 import com.example.myapp.data.UserAuth;
+import com.example.myapp.dto.Order_dto;
 import com.example.myapp.service.BookService;
 import com.example.myapp.service.CartService;
 import com.example.myapp.service.OrderService;
@@ -28,7 +29,7 @@ public class OrderController
     @Autowired
     BookService accessBook ; 
     @GetMapping("/order")
-    public Order[] getOrderList(HttpServletRequest request)
+    public Order_dto[] getOrderList(HttpServletRequest request)
     {
         return orderService.getList(request) ; 
     }

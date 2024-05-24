@@ -1,11 +1,11 @@
 package com.example.myapp.data ; 
-import com.example.myapp.data.Book_Basic;
 import jakarta.persistence.*;
+import java.util.List;
 import lombok.Data;
 @Data
 @Entity 
 @Table(name = "book" ,schema = "bookdb")
-public class Book extends Book_Basic
+public class Book
 {
 	@Id 
 	@Column(name="book_id") 
@@ -30,9 +30,11 @@ public class Book extends Book_Basic
 	@Column(name="real_price") 
     private double RealPrice ; 
 
+	// @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+	// @JoinColumn(name="book_id") 
+	// private List<Cart> carts ; 
 	public Book(int Book_Id , String iName, String iAuthor , String iDescription, double iPrice,double real_price , int iStorage)
 	{
-		super(Book_Id,iName,iPrice) ; 
 		this.bookId = Book_Id ; 
 		this.Name = iName ; 
 		this.Price = iPrice ; 

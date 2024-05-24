@@ -21,7 +21,7 @@ public class BookController {
     BookService accessBook ; 
 
     @GetMapping("/booklist")
-    public Book_Basic[] bookList(HttpServletRequest request)
+    public Book[] bookList(HttpServletRequest request)
     {
         System.out.println(SessionUtils.readSession("user_id", request)) ; 
         return accessBook.getList(request) ; 

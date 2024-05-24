@@ -2,6 +2,7 @@ package com.example.myapp.service ;
 
 import com.example.myapp.dao.AccessCart;
 import com.example.myapp.data.Cart;
+import com.example.myapp.dto.Cart_dto;
 import com.example.myapp.utils.SessionUtils;
 
 import java.util.concurrent.ExecutionException;
@@ -64,20 +65,24 @@ public class CartService implements com.example.myapp.service.Service{
         return null ; //false
     }
 
-    public Cart[] getList(HttpServletRequest request)
+    public Cart_dto[] getList(HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
-        Cart[] ret ;
-        try{
-            ret = accessCart.findByUserId(user_id) ;
+        // try{
+            Cart[] result = accessCart.findByUserId(user_id) ; 
+            Cart_dto[] ret = new Cart_dto[result.length] ; 
             
-            System.out.println(ret[0].getUserId()) ;
-        }
-        catch(Exception err)
-        {
-            System.err.println(err);
-            return new Cart[]{}; 
-        }
-        return ret ; 
+            int cnt = 0 ; 
+            for (Cart cart : result) {
+                ret[cnt] = new Cart_dto(user_id, cart.getBookId(), cart.getBook().getPrice(),cart.getBook().getName()) ; 
+                cnt ++ ; 
+            }
+            return ret ; 
+        // }
+        // catch(Exception err)
+        // {
+        //     System.err.println(err);
+        //     return new Cart_dto[]{}; 
+        // }
     }
 }

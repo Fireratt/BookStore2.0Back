@@ -5,6 +5,7 @@ import com.example.myapp.dao.AccessAccount;
 import com.example.myapp.dao.AccessCart;
 import com.example.myapp.data.Cart;
 import com.example.myapp.data.UserAuth;
+import com.example.myapp.dto.Cart_dto;
 import com.example.myapp.service.CartService;
 import com.example.myapp.service.SessionService;
 import com.example.myapp.utils.SessionUtils;
@@ -17,7 +18,7 @@ public class CartController {
     CartService cartService ; 
 
     @GetMapping("/cart")
-    public Cart[] getCarts(HttpServletRequest request)
+    public Cart_dto[] getCarts(HttpServletRequest request)
     {
         return cartService.getList(request) ; 
     }

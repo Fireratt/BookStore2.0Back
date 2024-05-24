@@ -14,7 +14,10 @@ public class User {
     @Basic
     @Column(name = "name")
     private String username ; 
+    @Transient
     private String date ; 
+    @Transient
+
     private String phone ; 
     
     @Basic

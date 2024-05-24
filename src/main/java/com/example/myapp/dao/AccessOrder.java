@@ -132,6 +132,6 @@ public interface AccessOrder extends JpaRepository<Order , Integer>{
 
     @Modifying
     @Transactional
-    @Query(value = "insert into orderitem(order_id , book_id , amount) values(?1 , ?2 , ?3)" , nativeQuery = true)
-    int saveOrderItem(int order_id , int book_id , int amount) ;  
+    @Query(value = "insert into orderitem(order_id , book_id , amount , price) values(?1 , ?2 , ?3 , ?4)" , nativeQuery = true)
+    int saveOrderItem(int order_id , int book_id , int amount , int price) ;  
 }

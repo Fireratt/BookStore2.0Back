@@ -5,14 +5,16 @@ import lombok.Data;
 import java.util.Date;
 import jakarta.persistence.*;
 import java.util.StringTokenizer;
+
+import com.example.myapp.dto.OrderItem_dto;
 @Entity 
 @Data
 @Table(name="orderitem")
 public class OrderItem {
     
-    @Column(name = "order_id")
+    @Column(name = "order_id" , insertable = false , updatable = false)
     private int order_id ; 
-    @Column(name = "book_id")
+    @Column(name = "book_id" , insertable = false , updatable = false)
     private int book_id ; 
     @Id 
     @Column(name = "orderitem_id")
@@ -20,13 +22,24 @@ public class OrderItem {
     private int orderitem_id ; 
 
 
-    @Column(name = "name")
-    // @Transient
+    // @Column(name = "name")
+    @Transient
     private String BookName ; 
+
     @Column(name = "price")
     private double Price ; 
+
     @Column(name = "amount")
     private int Amount ; 
+
+    @ManyToOne(cascade = CascadeType.REFRESH , fetch = FetchType.EAGER) 
+    @JoinColumn(name="book_id")
+    private Book book ;
+
+    // @ManyToOne(cascade = CascadeType.REFRESH , fetch = FetchType.LAZY) 
+    // @JoinColumn(name="order_id")
+    // private Order order ; 
+
     public OrderItem(int book_id , String bookName , double price , 
         int amount )
     {
@@ -57,5 +70,10 @@ public class OrderItem {
     public OrderItem()
     {
 
+    }
+
+    public OrderItem_dto toDto()
+    {
+        return new OrderItem_dto(BookName, Price, Amount) ; 
     }
 }
