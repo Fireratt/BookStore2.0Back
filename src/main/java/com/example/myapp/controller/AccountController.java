@@ -1,11 +1,15 @@
 package com.example.myapp.controller ; 
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 import com.example.myapp.dao.AccessAccount;
 import com.example.myapp.data.UserAuth;
 import com.example.myapp.utils.SessionUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import jakarta.servlet.http.* ; 
 @RestController
 public class AccountController {
@@ -18,12 +22,13 @@ public class AccountController {
 		String password = Account.get("password") ;  
 		System.out.println("Get Request:" + userName+ ":" + password);
 		HashMap<String,String> ret = new HashMap<>() ; 
-		String user_id = accessAccount.confirmLogin(userName, password); 
-		System.out.println("Result" + user_id);
-        if(user_id != null)
+		List<Map> user = accessAccount.confirmLogin(userName, password); 
+		System.out.println("Result" + user.get(0).get("user_id"));
+        if(user.size() != 0)
 		{
 			ret.put("State", "Success") ; 
-			SessionUtils.setSession(new UserAuth(user_id), request);
+			ret.put("Administrator" , user.get(0).get("administrator").toString()) ; 
+			SessionUtils.setSession(new UserAuth(user.get(0).get("user_id").toString()), request);
 			return ret ; 
 		}
 		else
@@ -39,13 +44,22 @@ public class AccountController {
 		String userName = newAccount.get("username") ;
 		String password = newAccount.get("password") ;  
 		String mail = newAccount.get("mail") ;  
-
-		accessAccount.register(userName,mail);
-		int userId = accessAccount.getNewUserId() ; 
-		accessAccount.saveAuth(userId, password);
 		HashMap<String,String> ret = new HashMap<>() ; 
-		ret.put("State", "Success") ; 
-		return ret ; 
+		try
+		{
+			
+			accessAccount.register(userName,mail);
+			int userId = accessAccount.getNewUserId() ; 
+			accessAccount.saveAuth(userId, password);
+			ret.put("State", "Success") ; 
+			return ret ; 
+		}
+		catch (DataIntegrityViolationException exp)
+		{
+			System.err.println("Catch SQL Integrity Erro");
+			ret.put("State", "Duplicate") ; 
+			return ret ; 
+		}
 	}
 
 

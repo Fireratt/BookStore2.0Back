@@ -1,5 +1,8 @@
 package com.example.myapp.data ; 
 import java.util.*;
+
+import com.example.myapp.dto.User_dto;
+
 import jakarta.persistence.*;
 import lombok.Data;
 @Entity 
@@ -44,8 +47,14 @@ public class User {
         return data ; 
     }
 
+    
     public User()
     {
         
+    }
+
+    public User_dto toDto()
+    {
+        return new User_dto() ; 
     }
 }

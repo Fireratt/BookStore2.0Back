@@ -10,7 +10,6 @@ import com.example.myapp.data.Book;
 import org.springframework.dao.DataAccessException; 
 import javax.annotation.Resource;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration ;
-import com.example.myapp.data.Book_Basic;
 import java.sql.ResultSet;
 import org.springframework.jdbc.support.rowset.SqlRowSet ; 
 import org.springframework.data.jpa.repository.JpaRepository;

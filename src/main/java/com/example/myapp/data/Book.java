@@ -1,6 +1,10 @@
 package com.example.myapp.data ; 
 import jakarta.persistence.*;
 import java.util.List;
+
+import com.example.myapp.dto.Book_Basic_dto;
+import com.example.myapp.dto.Book_dto;
+
 import lombok.Data;
 @Data
 @Entity 
@@ -47,5 +51,15 @@ public class Book
 	public Book()
 	{
 
+	}
+
+	public Book_Basic_dto toBasicDto()
+	{
+		return new Book_Basic_dto(bookId,  Name , Price) ; 
+	}
+	
+	public Book_dto toDto()
+	{
+		return new Book_dto(bookId, Name, Author, Description, Price ,RealPrice, Storage) ; 
 	}
 }

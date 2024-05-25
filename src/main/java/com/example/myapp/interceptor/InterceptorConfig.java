@@ -17,6 +17,7 @@ public class InterceptorConfig implements WebMvcConfigurer{
        registration.addPathPatterns("/**") ; 
        registration.excludePathPatterns(
         "/login" 
+        ,"/register"
        ) ; 
     }
 

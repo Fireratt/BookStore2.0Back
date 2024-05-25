@@ -2,6 +2,8 @@ package com.example.myapp.service;
 import com.example.myapp.dao.AccessBook;
 import com.example.myapp.data.Book;
 import com.example.myapp.data.Cart;
+import com.example.myapp.dto.Book_Basic_dto;
+import com.example.myapp.dto.Book_dto;
 import com.example.myapp.utils.SessionUtils;
 
 import java.util.concurrent.ExecutionException;
@@ -54,28 +56,34 @@ public class BookService implements com.example.myapp.service.Service{
         return false ; 
     }
 
-    public Book get(Object entity, HttpServletRequest request)
+    public Book_dto get(Object entity, HttpServletRequest request)
     {
         if(entity instanceof Integer)
         {
             Book ret = accessBook.findByBookId((Integer)entity) ; 
-            return ret ; 
+            return ret.toDto() ; 
         }
         return null ; //false
     }
 
-    public Book[] getList(HttpServletRequest request)
+    public Book_Basic_dto[] getList(HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
-        Book[] ret ;
+        Book[] result ;
+        Book_Basic_dto[] ret = null ; 
         try{
-            ret = accessBook.findByPage(1*PAGE_SIZE) ;
-            
+            result = accessBook.findByPage(1*PAGE_SIZE) ;
+            ret = new Book_Basic_dto[result.length] ; 
+            int cnt = 0 ; 
+            for (Book book : result ) {
+                ret[cnt] = book.toBasicDto() ; 
+                cnt++ ; 
+            }
         }
         catch(Exception err)
         {
             System.err.println(err);
-            return new Book[]{}; 
+            return new Book_Basic_dto[]{}; 
         }
         return ret ; 
     }

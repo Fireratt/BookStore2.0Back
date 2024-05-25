@@ -8,11 +8,12 @@ import com.example.myapp.DemoApplication.HttpException;
 import com.example.myapp.dao.AccessAccount;
 import com.example.myapp.dao.AccessBook;
 import com.example.myapp.data.Book;
-import com.example.myapp.data.Book_Basic;
 import com.example.myapp.data.Cart;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.OrderItem;
 import com.example.myapp.data.UserAuth;
+import com.example.myapp.dto.Book_Basic_dto;
+import com.example.myapp.dto.Book_dto;
 import com.example.myapp.dto.Order_dto;
 import com.example.myapp.service.BookService;
 import com.example.myapp.service.CartService;
@@ -46,7 +47,7 @@ public class OrderController
             System.out.println("AddOrder::" + book_id);
             int amount = Integer.parseInt(singleBook.get("amount")) ; 
             System.out.println(amount);
-            Book bookInfo = accessBook.get(book_id , request) ; 
+            Book_dto bookInfo = accessBook.get(book_id , request) ; 
             OrderItem newItem = new OrderItem(book_id, bookInfo.getName(), bookInfo.getPrice(), amount) ;
             orderItems.add(newItem) ; 
         }
@@ -73,7 +74,7 @@ public class OrderController
             int book_id =Integer.parseInt(singleBook.get("book_id")) ; 
             String BookAmount = singleBook.get("amount") ; 
             System.out.println(singleBook.get("book_id")) ; 
-            Book bookInfo = accessBook.get(book_id , request) ; 
+            Book_dto bookInfo = accessBook.get(book_id , request) ; 
             HashMap<String,String> ret = new HashMap<String,String>() ; 
             ret.put("book_id","" +  book_id) ; 
             ret.put("Name" ,"" +  bookInfo.getName()) ; 

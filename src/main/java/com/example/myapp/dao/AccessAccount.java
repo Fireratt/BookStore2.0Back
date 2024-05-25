@@ -4,11 +4,13 @@ import org.springframework.stereotype.* ;
 
 import com.example.myapp.data.UserAuth;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 // import java.io.Console;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate ; 
+import org.springframework.jdbc.core.JdbcTemplate ;
+import org.springframework.dao.DataIntegrityViolationException;
 // import com.example.myapp.BookList;
 // import com.example.myapp.data.Book;
 // import org.springframework.dao.DataAccessException; 
@@ -90,17 +92,19 @@ import com.example.myapp.data.User;
 // }
 public interface AccessAccount extends JpaRepository<User , Integer>{
 
-    @Query(value="select b.user_id from (select * from user where name = ?1) a join userauth b on a.user_id = b.user_id where b.pwd = ?2" , nativeQuery = true)
-    public String confirmLogin(String userName , String password) ; 
+    @Query(value="select b.user_id , a.administrator from (select * from user where name = ?1) a join userauth b on a.user_id = b.user_id where b.pwd = ?2" , nativeQuery = true)
+    public List<Map> confirmLogin(String userName , String password) ; 
     
     @Modifying
     @Transactional
-    @Query(value="insert into User(username,mail) values(?1 , ?2)")
-    public void register(String username, String mail) ; 
+    @Query(value="insert into User(username,mail) values(?1 , ?2)") // when duplicate , throw the error
+    public void register(String username, String mail) throws DataIntegrityViolationException ; 
 
     @Query(value="SELECT LAST_INSERT_ID() as lastId" , nativeQuery = true) 
     int getNewUserId() ;
 
+    @Modifying
+    @Transactional
     @Query(value="insert into userauth(user_id,pwd) values(?1 , ?2)", nativeQuery = true)
-    public void saveAuth(int user_id , String pwd) ; 
+    public void saveAuth(int user_id , String pwd) throws DataIntegrityViolationException; 
 }
