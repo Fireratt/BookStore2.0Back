@@ -12,7 +12,7 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id ; 
+    private int id ; 
 
     @Basic
     @Column(name = "name")
@@ -27,9 +27,12 @@ public class User {
     @Column(name= "mail")
     private String mail ; 
 
+    @Basic
+    @Column(name = "administrator")
+    private boolean administrator ; 
     public User(Map<String,Object> data)
     {
-        id = data.get("userid").toString() ; 
+        id = Integer.parseInt(data.get("userid").toString()) ; 
         username = data.get("username").toString() ; 
         date = data.get("date").toString() ; 
         phone = data.get("phone").toString() ; 
@@ -39,7 +42,7 @@ public class User {
     public Map<String,String> getMap()
     {
         HashMap<String,String> data = new HashMap<String,String>() ; 
-        data.put("id" , id) ; 
+        data.put("id" ,id + "") ; 
         data.put("username" , username) ; 
         data.put("date" , date) ; 
         data.put("phone" , phone) ; 

@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
+import com.example.myapp.utils.ByteUtils;
 
+import ch.qos.logback.core.encoder.ByteArrayUtil;
 import lombok.Data;
 @Data
 @Entity 
@@ -34,6 +36,10 @@ public class Book
 	@Column(name="real_price") 
     private double RealPrice ; 
 
+	@Basic(fetch=FetchType.LAZY)
+	@Lob
+	@Column(name="cover")
+	private String cover ;
 	// @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
 	// @JoinColumn(name="book_id") 
 	// private List<Cart> carts ; 
@@ -60,6 +66,7 @@ public class Book
 	
 	public Book_dto toDto()
 	{
-		return new Book_dto(bookId, Name, Author, Description, Price ,RealPrice, Storage) ; 
+
+		return new Book_dto(bookId, Name, Author, Description, Price ,RealPrice, Storage , cover) ; 
 	}
 }

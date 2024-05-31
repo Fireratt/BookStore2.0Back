@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate ; 
 import com.example.myapp.BookList;
 import com.example.myapp.data.Book;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.dao.DataAccessException; 
 import javax.annotation.Resource;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration ;
@@ -105,5 +108,18 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
 
     @Modifying
     @Query(value = "delete from Book c where c.bookId= ?1", nativeQuery = false )
-    Book deleteById(int Book_Id) ; 
-}
+    int deleteById(int Book_Id) ; 
+
+    @Query(value = "select b from Book b where b.Name like %?1%")
+    Book[] SearchByName(String name) ;
+
+    @Modifying
+    @Transactional
+    @Query(value = "update Book b set b.Name=?2,b.Author=?3,b.Storage=?4 where b.bookId=?1")
+    int modifyBook(int book_id , String name , String author , int Storage) ;
+    
+    @Modifying
+    @Transactional
+    @Query(value = "update Book b set b.cover=?2 where b.bookId=?1") 
+    int modifyCover(int book_id , String cover) ; 
+}   
