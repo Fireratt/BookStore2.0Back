@@ -38,7 +38,8 @@ public class AdministratorService {
         }
         return ret ; 
     }
-    public boolean modifyBook(int book_id , String name , String author , int storage , String cover , HttpServletRequest request) throws PermissionDeniedException
+    public boolean modifyBook(int book_id , String name , 
+        String author , int storage , String cover , HttpServletRequest request) throws PermissionDeniedException
     {
         try
         {
@@ -61,6 +62,54 @@ public class AdministratorService {
             return false ; 
         }
         return true ; 
+    }
+    public boolean addBook( String name , String author 
+        , int storage , double price,String description, String isbn,String cover , HttpServletRequest request) throws PermissionDeniedException
+    {
+        try
+        {
+            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
+            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
+            if(!isAdministrator)
+            {
+                throw new PermissionDeniedException() ; 
+            }
+            accessBook.addBook(name, price, author, description ,storage, isbn, cover) ; 
+        }
+        catch(Exception err)
+        {
+            err.printStackTrace();
+            System.err.println(err);
+            return false ; 
+        }
+        return true ; 
+    }
+
+    public boolean deleteBook(int book_id, HttpServletRequest request)throws PermissionDeniedException
+    {
+        try
+        {
+            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
+            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
+            if(!isAdministrator)
+            {
+                throw new PermissionDeniedException() ; 
+            }
+            if(accessBook.deleteBook(book_id)>0)
+            {
+                return true ; 
+            } 
+            else
+            {
+                return false ; 
+            }
+        }
+        catch(Exception err)
+        {
+            err.printStackTrace();
+            System.err.println(err);
+            return false ; 
+        }
     }
     public class PermissionDeniedException extends Exception
     {

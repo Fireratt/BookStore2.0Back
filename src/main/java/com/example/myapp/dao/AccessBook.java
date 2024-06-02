@@ -99,18 +99,14 @@ import org.springframework.data.jpa.repository.Query;
 // }
 public interface AccessBook extends JpaRepository<Book , Integer>{
 
-    @Query(value = "select b from Book b where b.bookId < ?1")
+    @Query(value = "select b from Book b where b.bookId < ?1 and b.valid=1")
     Book[] findByPage(int page) ; 
 
     Book findByBookId(int Book_Id) ; 
     @Modifying
     Book save(Book result) ; 
 
-    @Modifying
-    @Query(value = "delete from Book c where c.bookId= ?1", nativeQuery = false )
-    int deleteById(int Book_Id) ; 
-
-    @Query(value = "select b from Book b where b.Name like %?1%")
+    @Query(value = "select b from Book b where b.Name like %?1% and b.valid=1")
     Book[] SearchByName(String name) ;
 
     @Modifying
@@ -122,4 +118,14 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Transactional
     @Query(value = "update Book b set b.cover=?2 where b.bookId=?1") 
     int modifyCover(int book_id , String cover) ; 
+
+    @Modifying
+    @Query(value = "insert into Book(Name,Price ,Author, Description ,Storage , isbn , cover) values(?1,?2,?3,?4,?5,?6,?7)")
+    @Transactional
+    int addBook(String name ,double price ,String author, String description , int storage , String isbn , String cover) ; 
+
+    @Modifying
+    @Transactional
+    @Query(value = "update Book b set b.valid=0 where b.bookId=?1")
+    int deleteBook(int book_id) ; 
 }   

@@ -87,4 +87,26 @@ public class BookService implements com.example.myapp.service.Service{
         }
         return ret ; 
     }
+
+    public Book_Basic_dto[] searchBook(String query , HttpServletRequest request)
+    {
+        int user_id = SessionService.getUserId(request) ;
+        Book[] result ;
+        Book_Basic_dto[] ret = null ; 
+        try{
+            result = accessBook.SearchByName(query) ; 
+            ret = new Book_Basic_dto[result.length] ; 
+            int cnt = 0 ; 
+            for (Book book : result ) {
+                ret[cnt] = book.toBasicDto() ; 
+                cnt++ ; 
+            }
+        }
+        catch(Exception err)
+        {
+            System.err.println(err);
+            return new Book_Basic_dto[]{}; 
+        }
+        return ret ; 
+    }
 }

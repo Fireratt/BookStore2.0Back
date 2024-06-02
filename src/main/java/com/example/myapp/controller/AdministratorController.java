@@ -81,4 +81,79 @@ public class AdministratorController {
         }
 
     }
+
+    @PutMapping("/book")
+    public Map<String,String> addBook(@RequestBody Map<String,Object> body , HttpServletRequest request , HttpServletResponse response)
+    {
+        HashMap<String,String> ret = new HashMap<>() ; 
+        try{
+            String cover = null ; 
+            if(body.get("cover") != null)
+            {
+                cover = body.get("cover").toString() ; 
+            }
+            String name = body.get("name").toString() ; 
+            String author = body.get("author").toString() ; 
+            int storage = Integer.parseInt(body.get("storage").toString()) ; 
+            String description = body.get("description").toString() ; 
+            String isbn =  body.get("isbn").toString() ; 
+            Double price =Double.parseDouble(body.get("price").toString()) ; 
+            if(administratorService.addBook(name , author , storage, price , isbn , description , cover , request))
+            {
+                ret.put("state", "true") ; 
+                return ret ; 
+            }
+            ret.put("state", "false") ; 
+            return ret ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                ret.put("state", "false") ; 
+                return ret ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                ret.put("state", "false") ; 
+                return ret ; 
+            }
+        }
+    }
+
+    @DeleteMapping("/book")
+    public Map<String,String> deleteBook(@RequestBody Map<String,Object> body , HttpServletRequest request , HttpServletResponse response)
+    {
+        HashMap<String,String> ret = new HashMap<>() ; 
+        try{
+            int book_id = Integer.parseInt(body.get("book_id").toString()) ; 
+            if(administratorService.deleteBook(book_id, request))
+            {
+                ret.put("state", "true") ; 
+                return ret ; 
+            }
+            ret.put("state", "false") ; 
+            return ret ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                ret.put("state", "false") ; 
+                return ret ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                ret.put("state", "false") ; 
+                return ret ; 
+            }
+        }
+    }
+
 }

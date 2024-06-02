@@ -46,8 +46,12 @@ public class BookController {
 		// accessBook.addBook(ret);
 		System.out.println("SUCCESS") ; 
 		return ret ; 
-
 	}
-	
+	@GetMapping("/book/search")
+	public Book_Basic_dto[] searchBook(@RequestParam Map<String,String> param , HttpServletRequest request)
+	{
+        String name = param.get("bookname") ; 
+        return accessBook.searchBook(name, request) ; 
+	}
 }
 

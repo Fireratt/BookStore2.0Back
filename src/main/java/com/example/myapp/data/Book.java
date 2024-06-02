@@ -36,10 +36,16 @@ public class Book
 	@Column(name="real_price") 
     private double RealPrice ; 
 
+	@Column(name = "isbn")
+	private String isbn ; 
+
 	@Basic(fetch=FetchType.LAZY)
 	@Lob
 	@Column(name="cover")
 	private String cover ;
+
+	@Column(name ="valid")
+	private int valid ; 
 	// @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
 	// @JoinColumn(name="book_id") 
 	// private List<Cart> carts ; 

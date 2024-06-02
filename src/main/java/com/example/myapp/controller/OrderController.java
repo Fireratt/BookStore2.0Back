@@ -84,4 +84,20 @@ public class OrderController
         }
         return items ; 
 	}
+
+    @GetMapping("/order/search")
+    public Order_dto[] searchOrder(@RequestParam Map<String,String> param,  HttpServletRequest request)
+    {
+        String query = param.get("query") ; 
+        return orderService.searchOrder(query, request) ; 
+    }
+
+    @GetMapping("/order/select")
+    public Order_dto[] selectOrder(@RequestParam Map<String,String> param,  HttpServletRequest request)
+    {
+        String start = param.get("start") ; 
+        String end = param.get("end") ; 
+        System.out.println("start"+start + " ,End" + end);
+        return orderService.selectOrderByDate(start, end, request) ; 
+    }
 }

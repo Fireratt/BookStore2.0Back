@@ -91,5 +91,30 @@ public class OrderService implements com.example.myapp.service.Service
         return entity ; 
     }
 
+    public Order_dto[] searchOrder(String query ,  HttpServletRequest request)
+    {
+        int user_id = SessionService.getUserId(request) ;
+        Order[] result = accessOrder.searchOrder(user_id, query) ; 
+        Order_dto[] ret = new Order_dto[result.length] ; 
+        int cnt = 0 ; 
+        for (Order order : result) {
+            ret[cnt] = order.toDto() ; 
+            cnt++; 
+        }
+        return ret ;
+    }
+
+    public Order_dto[] selectOrderByDate(String start , String end ,  HttpServletRequest request)
+    {
+        int user_id = SessionService.getUserId(request) ;
+        Order[] result = accessOrder.selectOrderByDate(user_id, start, end) ; 
+        Order_dto[] ret = new Order_dto[result.length] ; 
+        int cnt = 0 ; 
+        for (Order order : result) {
+            ret[cnt] = order.toDto() ; 
+            cnt++; 
+        }
+        return ret ;
+    }
 }
 

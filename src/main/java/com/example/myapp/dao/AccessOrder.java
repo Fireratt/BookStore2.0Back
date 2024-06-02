@@ -134,4 +134,10 @@ public interface AccessOrder extends JpaRepository<Order , Integer>{
     @Transactional
     @Query(value = "insert into orderitem(order_id , book_id , amount , price) values(?1 , ?2 , ?3 , ?4)" , nativeQuery = true)
     int saveOrderItem(int order_id , int book_id , int amount , int price) ;  
+
+    @Query(value = "select a from Order a join OrderItem b on a.orderId = b.order_id and userId = ?1 where b.book.Name like %?2%")
+    Order[] searchOrder(int user_id , String query) ; 
+
+    @Query(value = "select a from Order a where a.userId = ?1 and a.date between ?2 and ?3")
+    Order[] selectOrderByDate(int user_id , String start , String end) ; 
 }
