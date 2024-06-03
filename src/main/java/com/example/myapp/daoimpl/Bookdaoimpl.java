@@ -54,4 +54,14 @@ public class Bookdaoimpl implements Bookdao{
     {
         return accessBook.deleteBook(book_id) ; 
     }
+
+    public Integer checkStorage(int book_id , int number)
+    {
+        return accessBook.checkStorage(book_id , number) ; 
+    }
+
+    public int updateStorage(int book_id , int number)
+    {
+        return accessBook.updateStorage(book_id, number) ; 
+    }
 }   

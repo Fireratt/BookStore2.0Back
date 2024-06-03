@@ -20,8 +20,10 @@ public class Book_dto
     private double RealPrice ; 
 // Byte array should encode it in the base64 format in this string
 	private String cover ; 
+
+	private String isbn ; 
     public Book_dto(int Book_Id , String iName, String iAuthor 
-		, String iDescription, double iPrice,double real_price , int iStorage , String cover)
+		, String iDescription, double iPrice,double real_price , int iStorage , String cover , String isbn)
 	{
 		this.bookId = Book_Id ; 
 		this.Name = iName ; 
@@ -31,6 +33,7 @@ public class Book_dto
         Storage = iStorage ; 
         RealPrice = real_price ; 
 		this.cover = cover ; 
+		this.isbn = isbn ; 
 	}
 
 }

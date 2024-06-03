@@ -25,4 +25,8 @@ public interface Bookdao {
     int addBook(String name ,double price ,String author, String description , int storage , String isbn , String cover) ; 
 
     int deleteBook(int book_id) ; 
+
+    Integer checkStorage(int book_id , int number) ; 
+
+    int updateStorage(int book_id , int number) ; 
 }   

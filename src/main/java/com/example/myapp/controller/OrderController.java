@@ -7,6 +7,7 @@ import com.example.myapp.DemoApplication;
 import com.example.myapp.DemoApplication.HttpException;
 import com.example.myapp.dao.*;
 import com.example.myapp.service.*;
+import com.example.myapp.service.OrderService.StorageNotEnoughException;
 import com.example.myapp.dto.*;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.OrderItem;
@@ -44,8 +45,17 @@ public class OrderController
             orderItems.add(newItem) ; 
         }
         Order newOrder = new Order(-1, -1, orderItems, "") ; 
-        boolean result = orderService.put(newOrder, request) ; 
+        boolean result = false; 
         HashMap<String,String> ret = new HashMap<>() ; 
+        try{
+            result = orderService.put(newOrder, request) ;
+        } catch(StorageNotEnoughException err)
+        {
+            result = false ; 
+            System.out.println(err.book_id + "::" + StorageNotEnoughException.message) ;
+            ret.put("reason" , "库存不足") ; 
+            ret.put("book_id" , err.book_id + "") ; 
+        }
         if(result)
             ret.put("Success","true" ) ; 
             else

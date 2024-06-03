@@ -1,4 +1,4 @@
-package com.example.myapp.service;
+package com.example.myapp.serviceimpl;
 import java.util.* ;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.* ; 

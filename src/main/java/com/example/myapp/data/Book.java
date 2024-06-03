@@ -73,6 +73,6 @@ public class Book
 	public Book_dto toDto()
 	{
 
-		return new Book_dto(bookId, Name, Author, Description, Price ,RealPrice, Storage , cover) ; 
+		return new Book_dto(bookId, Name, Author, Description, Price ,RealPrice, Storage , cover , isbn) ; 
 	}
 }

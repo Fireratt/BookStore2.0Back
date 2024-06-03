@@ -23,5 +23,6 @@ public interface BookService {
     public Book_dto get(Object entity, HttpServletRequest request) ; 
 
     public Book_Basic_dto[] getList(HttpServletRequest request) ; 
+    
     public Book_Basic_dto[] searchBook(String query , HttpServletRequest request) ; 
 }

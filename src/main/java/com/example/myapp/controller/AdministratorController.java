@@ -44,12 +44,13 @@ public class AdministratorController {
         HashMap<String,String> ret = new HashMap<>() ; 
         try{
             System.out.println("Size in Body:" + ByteUtils.getObjectSize(body) + "");
-            String cover = body.get("cover").toString() ; 
+            String cover = null ; 
             if(body.get("cover") != null)
             {
                 cover = body.get("cover").toString() ; 
                 System.out.println(("ReceiveCover" + cover)) ; 
             }
+
             String name = body.get("name").toString() ; 
             String author = body.get("author").toString() ; 
             int storage = Integer.parseInt(body.get("storage").toString()) ; 

@@ -1,6 +1,7 @@
 package com.example.myapp.serviceimpl ;
 
 import com.example.myapp.dao.Cartdao;
+import com.example.myapp.dao.Bookdao;
 import com.example.myapp.dao.Orderdao;
 import com.example.myapp.data.Cart;
 import com.example.myapp.utils.SessionUtils;
@@ -15,7 +16,6 @@ import com.example.myapp.data.OrderItem;
 import com.example.myapp.dto.Order_dto;
 import com.example.myapp.service.OrderService;
 import com.example.myapp.service.SessionService;
-
 import java.util.*;
 @Service
 public class OrderServiceimpl implements OrderService
@@ -24,6 +24,8 @@ public class OrderServiceimpl implements OrderService
     Orderdao accessOrder;
     @Autowired
     Cartdao accessCart ; 
+    @Autowired
+    Bookdao accessBook ; 
     public Order_dto[] getList(HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
@@ -61,14 +63,22 @@ public class OrderServiceimpl implements OrderService
             int user_id = SessionService.getUserId(request) ;
             result.setUserId(user_id);
             // should first check the storage is enough
-
+            List<OrderItem> items = result.getOrderItems() ; 
+            for(int i = 0 ; i < items.size() ; i++)
+            {
+                int book_id = items.get(i).getBook_id() ; 
+                if(accessBook.checkStorage(book_id,  items.get(i).getAmount()) == null)
+                {
+                    throw new StorageNotEnoughException(book_id) ; 
+                }
+            }
             accessOrder.save(user_id,result.getDate()) ;
             int orderId = accessOrder.getNewOrderId() ; 
-            List<OrderItem> items = result.getOrderItems() ; 
 
             int itemNum = items.size() ; 
             for(int i = 0 ; i < itemNum ; i++)
             {
+                accessBook.updateStorage(items.get(i).getBook_id() , items.get(i).getAmount()) ; 
                 accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount() ,(int)items.get(i).getPrice()) ;  
                 accessCart.deleteByIds(user_id, items.get(i).getBook_id()) ; 
             }
