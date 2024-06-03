@@ -1,6 +1,4 @@
 package com.example.myapp.service;
-import com.example.myapp.dao.AccessBook;
-import com.example.myapp.dao.AccessUser;
 import com.example.myapp.data.Book;
 import com.example.myapp.data.Cart;
 import com.example.myapp.data.User;
@@ -15,102 +13,18 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 @Service
-public class AdministratorService {
-    @Autowired
-    AccessBook accessBook ; 
-    @Autowired
-    AccessUser accessUser ; 
-    public Book_dto[] searchBook(String toSearch, HttpServletRequest request) throws PermissionDeniedException
-    {
-        int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
-        // check if current User is administrator.
-        boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
-        if(!isAdministrator)
-        {
-            throw new PermissionDeniedException() ; 
-        }
-        Book[] result = accessBook.SearchByName(toSearch) ; 
-        Book_dto[] ret = new Book_dto[result.length] ;
-        int cnt = 0 ;  
-        for (Book book : result) {
-            ret[cnt] = book.toDto() ; 
-            cnt++ ; 
-        }
-        return ret ; 
-    }
-    public boolean modifyBook(int book_id , String name , 
-        String author , int storage , String cover , HttpServletRequest request) throws PermissionDeniedException
-    {
-        try
-        {
-            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
-            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
-            if(!isAdministrator)
-            {
-                throw new PermissionDeniedException() ; 
-            }
-            accessBook.modifyBook(book_id, name, author, storage) ;
-            if(cover!=null)
-            {
-                accessBook.modifyCover(book_id, cover) ; 
-            }
-        }
-        catch(Exception err)
-        {
-            err.printStackTrace();
-            System.err.println(err);
-            return false ; 
-        }
-        return true ; 
-    }
-    public boolean addBook( String name , String author 
-        , int storage , double price,String description, String isbn,String cover , HttpServletRequest request) throws PermissionDeniedException
-    {
-        try
-        {
-            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
-            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
-            if(!isAdministrator)
-            {
-                throw new PermissionDeniedException() ; 
-            }
-            accessBook.addBook(name, price, author, description ,storage, isbn, cover) ; 
-        }
-        catch(Exception err)
-        {
-            err.printStackTrace();
-            System.err.println(err);
-            return false ; 
-        }
-        return true ; 
-    }
+public interface AdministratorService {
 
-    public boolean deleteBook(int book_id, HttpServletRequest request)throws PermissionDeniedException
-    {
-        try
-        {
-            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
-            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
-            if(!isAdministrator)
-            {
-                throw new PermissionDeniedException() ; 
-            }
-            if(accessBook.deleteBook(book_id)>0)
-            {
-                return true ; 
-            } 
-            else
-            {
-                return false ; 
-            }
-        }
-        catch(Exception err)
-        {
-            err.printStackTrace();
-            System.err.println(err);
-            return false ; 
-        }
-    }
+    public Book_dto[] searchBook(String toSearch, HttpServletRequest request) throws PermissionDeniedException ; 
+
+    public boolean modifyBook(int book_id , String name , 
+        String author , int storage , String cover , HttpServletRequest request) throws PermissionDeniedException ; 
+
+    public boolean addBook( String name , String author 
+        , int storage , double price,String description, String isbn,String cover , HttpServletRequest request) throws PermissionDeniedException ; 
+
+    public boolean deleteBook(int book_id, HttpServletRequest request)throws PermissionDeniedException ; 
+
     public class PermissionDeniedException extends Exception
     {
         public final String message = "Not the administrator , Permission Denied" ; 

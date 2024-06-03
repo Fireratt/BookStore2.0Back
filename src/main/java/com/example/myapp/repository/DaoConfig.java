@@ -1,4 +1,4 @@
-package com.example.myapp.dao ; 
+package com.example.myapp.repository; 
 import org.springframework.context.annotation.Configuration ; 
 import org.springframework.context.annotation.ComponentScan ; 
 @ComponentScan(value="com.example.dao")

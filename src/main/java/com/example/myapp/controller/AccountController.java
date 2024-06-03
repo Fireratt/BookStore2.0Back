@@ -3,7 +3,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
-import com.example.myapp.dao.AccessAccount;
+
+import com.example.myapp.dao.Accountdao;
 import com.example.myapp.data.UserAuth;
 import com.example.myapp.utils.SessionUtils;
 
@@ -14,7 +15,7 @@ import jakarta.servlet.http.* ;
 @RestController
 public class AccountController {
     @Autowired
-    private AccessAccount accessAccount ; 
+    private Accountdao accessAccount ; 
 	@PostMapping("/login")
 	public Map<String,String> confirmLogin(@RequestBody Map<String,String> Account ,  HttpServletRequest request , HttpServletResponse response)
 	{

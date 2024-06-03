@@ -33,6 +33,6 @@ public class Cart extends Object{
 
     public Cart_dto toCart_dto()
     {
-        return new Cart_dto(userId, bookId, book.getPrice(), book.getName()) ; 
+        return new Cart_dto(userId, bookId, book.getPrice(), book.getName() , book.getCover()) ; 
     }
 }

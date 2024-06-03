@@ -12,11 +12,14 @@ public class Cart_dto {
     private double bookPrice ; 
 
     private String bookName ;
-    public Cart_dto(int userId, int bookId , double bookPrice , String bookName)
+
+    private String cover ; 
+    public Cart_dto(int userId, int bookId , double bookPrice , String bookName , String cover)
     {
         this.bookId = bookId ; 
         this.bookPrice = bookPrice ; 
         this.userId = userId ; 
         this.bookName = bookName; 
+        this.cover = cover ; 
     }
 }

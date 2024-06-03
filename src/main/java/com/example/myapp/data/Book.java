@@ -67,7 +67,7 @@ public class Book
 
 	public Book_Basic_dto toBasicDto()
 	{
-		return new Book_Basic_dto(bookId,  Name , Price) ; 
+		return new Book_Basic_dto(bookId,  Name , Price , cover) ; 
 	}
 	
 	public Book_dto toDto()

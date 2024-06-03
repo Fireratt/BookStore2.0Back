@@ -3,7 +3,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
-import com.example.myapp.dao.AccessAccount;
 import com.example.myapp.data.UserAuth;
 import com.example.myapp.service.AdministratorService;
 import com.example.myapp.utils.ByteUtils;
@@ -45,10 +44,11 @@ public class AdministratorController {
         HashMap<String,String> ret = new HashMap<>() ; 
         try{
             System.out.println("Size in Body:" + ByteUtils.getObjectSize(body) + "");
-            String cover = null ; 
+            String cover = body.get("cover").toString() ; 
             if(body.get("cover") != null)
             {
                 cover = body.get("cover").toString() ; 
+                System.out.println(("ReceiveCover" + cover)) ; 
             }
             String name = body.get("name").toString() ; 
             String author = body.get("author").toString() ; 

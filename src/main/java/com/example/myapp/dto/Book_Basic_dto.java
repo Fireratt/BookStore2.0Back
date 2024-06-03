@@ -5,11 +5,13 @@ public class Book_Basic_dto {
     public int bookId; 
 	public String Name ; 
     public double Price ; 
-    public Book_Basic_dto(int Book_Id , String iName,double iPrice)
+    public String cover ; 
+    public Book_Basic_dto(int Book_Id , String iName,double iPrice , String cover)
     {
         this.bookId = Book_Id ; 
         this.Name = iName ; 
         this.Price = iPrice ; 
+        this.cover = cover ; 
     }
     public Book_Basic_dto(){
 

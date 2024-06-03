@@ -15,7 +15,6 @@ import com.example.myapp.data.Order;
 
 import org.springframework.http.HttpHeaders ; 
 import com.example.myapp.FilterRegistration;
-import com.example.myapp.dao.AccessBook; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.ApplicationContext;
@@ -24,9 +23,6 @@ import com.example.myapp.controller.*;
 @RestController
 @SpringBootApplication
 public class DemoApplication {
-	@Autowired
-		private AccessBook accessBook ;
-
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "bad request")
 	public static class HttpException extends RuntimeException
 	{

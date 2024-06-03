@@ -5,19 +5,11 @@ import java.util.*;
 import com.example.myapp.BookList;
 import com.example.myapp.DemoApplication;
 import com.example.myapp.DemoApplication.HttpException;
-import com.example.myapp.dao.AccessAccount;
-import com.example.myapp.dao.AccessBook;
-import com.example.myapp.data.Book;
-import com.example.myapp.data.Cart;
+import com.example.myapp.dao.*;
+import com.example.myapp.service.*;
+import com.example.myapp.dto.*;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.OrderItem;
-import com.example.myapp.data.UserAuth;
-import com.example.myapp.dto.Book_Basic_dto;
-import com.example.myapp.dto.Book_dto;
-import com.example.myapp.dto.Order_dto;
-import com.example.myapp.service.BookService;
-import com.example.myapp.service.CartService;
-import com.example.myapp.service.OrderService;
 import com.example.myapp.utils.SessionUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +28,7 @@ public class OrderController
     }
     
     @PostMapping("/order")  // the front end should pass a Array of kv like : [book_id , amount]
-    public Map<String,String> addOrder(@RequestBody List<Map<String,String>> body,HttpServletRequest request)
+    public Map<String,String> addOrder(@RequestBody List<Map<String,String>> body,HttpServletRequest request , HttpServletResponse response)
     {
         ArrayList<OrderItem> orderItems = new ArrayList<>() ; 
         int size = body.size() ; 

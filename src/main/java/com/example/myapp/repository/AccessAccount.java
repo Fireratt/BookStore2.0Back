@@ -1,4 +1,4 @@
-package com.example.myapp.dao; 
+package com.example.myapp.repository; 
 
 import org.springframework.stereotype.* ;
 
