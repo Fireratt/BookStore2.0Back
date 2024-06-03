@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.example.myapp.data.Order;
 import jakarta.servlet.http.* ; 
 import com.example.myapp.data.OrderItem;
+import com.example.myapp.dto.OrderStatistic_dto;
 import com.example.myapp.dto.Order_dto;
+import com.example.myapp.service.OrderService.StorageNotEnoughException;
 
 import java.util.*;
 @Service
@@ -26,6 +28,8 @@ public interface OrderService {
     public Order_dto[] searchOrder(String query ,  HttpServletRequest request) ; 
 
     public Order_dto[] selectOrderByDate(String start , String end ,  HttpServletRequest request) ; 
+
+    public OrderStatistic_dto countOrder(String start , String end , HttpServletRequest request) ; 
 
     public class StorageNotEnoughException extends Exception
     {

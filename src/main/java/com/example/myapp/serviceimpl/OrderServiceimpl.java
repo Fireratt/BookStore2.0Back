@@ -3,6 +3,7 @@ package com.example.myapp.serviceimpl ;
 import com.example.myapp.dao.Cartdao;
 import com.example.myapp.dao.Bookdao;
 import com.example.myapp.dao.Orderdao;
+import com.example.myapp.dto.OrderStatistic_dto;
 import com.example.myapp.data.Cart;
 import com.example.myapp.utils.SessionUtils;
 
@@ -131,6 +132,12 @@ public class OrderServiceimpl implements OrderService
         return ret ;
     }
 
-
+    public OrderStatistic_dto countOrder(String start , String end , HttpServletRequest request)
+    {
+        int user_id = SessionService.getUserId(request) ;
+        Order[] result = accessOrder.selectOrderByDate(user_id, start, end) ; 
+        OrderStatistic_dto ret = new OrderStatistic_dto(result) ; 
+        return ret ; 
+    }
 }
 

@@ -18,6 +18,8 @@ import jakarta.servlet.http.* ;
 @RestController
 public class OrderController 
 {
+    static final String DEFAULT_START = "1970-01-01" ; 
+    static final String DEFAULT_END = "2035-01-01" ; 
     @Autowired
     OrderService orderService ; 
     @Autowired
@@ -98,8 +100,32 @@ public class OrderController
     public Order_dto[] selectOrder(@RequestParam Map<String,String> param,  HttpServletRequest request)
     {
         String start = param.get("start") ; 
+        if(start == "")
+        {
+            start = DEFAULT_START ;  // default value ; 
+        }
         String end = param.get("end") ; 
+        if(end == "")
+        {
+            end = DEFAULT_END ;  // default value ; 
+        }
         System.out.println("start"+start + " ,End" + end);
         return orderService.selectOrderByDate(start, end, request) ; 
+    }
+
+    @GetMapping("/order/statistic")
+    public OrderStatistic_dto countOrder(@RequestParam Map<String,String> param ,  HttpServletRequest request)
+    {
+        String start = param.get("start") ; 
+        if(start == "")
+        {
+            start = DEFAULT_START ;  // default value ; 
+        }
+        String end = param.get("end") ; 
+        if(end == "")
+        {
+            end = DEFAULT_END ;  // default value ; 
+        }
+        return orderService.countOrder(start, end, request) ; 
     }
 }
