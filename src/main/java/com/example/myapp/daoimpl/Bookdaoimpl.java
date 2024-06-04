@@ -4,6 +4,8 @@ import org.springframework.stereotype.* ;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate ; 
 import com.example.myapp.BookList;
 import com.example.myapp.dao.Bookdao;
@@ -15,9 +17,9 @@ public class Bookdaoimpl implements Bookdao{
 
     @Autowired
     private AccessBook accessBook ; 
-    public Book[] findByPage(int page) 
+    public Page<Book> findByPage(Pageable pageStatus) 
     {
-        return accessBook.findByPage(page) ; 
+        return accessBook.findByPage(pageStatus) ; 
     }
 
     public Book findByBookId(int Book_Id)

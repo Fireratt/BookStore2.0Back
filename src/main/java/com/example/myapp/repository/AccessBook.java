@@ -14,7 +14,9 @@ import org.springframework.dao.DataAccessException;
 import javax.annotation.Resource;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration ;
 import java.sql.ResultSet;
-import org.springframework.jdbc.support.rowset.SqlRowSet ; 
+import org.springframework.jdbc.support.rowset.SqlRowSet ;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -99,8 +101,8 @@ import org.springframework.data.jpa.repository.Query;
 // }
 public interface AccessBook extends JpaRepository<Book , Integer>{
 
-    @Query(value = "select b from Book b where b.bookId < ?1 and b.valid=1")
-    Book[] findByPage(int page) ; 
+    @Query(value = "select b from Book b where b.valid=1")
+    Page<Book> findByPage(Pageable pageStatus) ; 
 
     Book findByBookId(int Book_Id) ; 
     @Modifying

@@ -10,20 +10,30 @@ import com.example.myapp.data.UserAuth;
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
 import com.example.myapp.service.BookService;
+import com.example.myapp.utils.PageUtils;
 import com.example.myapp.utils.SessionUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable; 
+import org.springframework.data.domain.Page; 
+
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import jakarta.servlet.http.* ; 
 @RestController
 public class BookController {
     @Autowired 
     BookService accessBook ; 
-
+	static final int PAGE_SIZE = 3 ; 
     @GetMapping("/booklist")
-    public Book_Basic_dto[] bookList(HttpServletRequest request)
+    public Page<Book_Basic_dto> bookList(@RequestParam Map<String,String> page , HttpServletRequest request)
     {
+		int pageNumber =Integer.parseInt(page.get("page")) ; 
         System.out.println(SessionUtils.readSession("user_id", request)) ; 
-        return accessBook.getList(request) ; 
+		Pageable pageStatus = PageRequest.of(pageNumber, PAGE_SIZE) ; 
+		// Book_Basic_dto[] result = accessBook.getList(pageStatus , request) ;
+        // return PageUtils.toPage(result , pageStatus); 
+		return accessBook.getList(pageStatus , request) ; 
     }
 
     @GetMapping("/book")

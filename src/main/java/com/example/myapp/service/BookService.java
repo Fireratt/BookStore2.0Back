@@ -8,6 +8,8 @@ import com.example.myapp.utils.SessionUtils;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.* ; 
@@ -22,7 +24,7 @@ public interface BookService {
 
     public Book_dto get(Object entity, HttpServletRequest request) ; 
 
-    public Book_Basic_dto[] getList(HttpServletRequest request) ; 
+    public Page<Book_Basic_dto> getList(Pageable pageStatus,HttpServletRequest request) ; 
     
     public Book_Basic_dto[] searchBook(String query , HttpServletRequest request) ; 
 }

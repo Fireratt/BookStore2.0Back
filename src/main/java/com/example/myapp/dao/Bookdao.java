@@ -4,13 +4,15 @@ import org.springframework.stereotype.* ;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate ; 
 import com.example.myapp.BookList;
 import com.example.myapp.data.Book;
 
 public interface Bookdao {
 
-    Book[] findByPage(int page) ; 
+    Page<Book> findByPage(Pageable pageStatus) ; 
 
     Book findByBookId(int Book_Id) ; 
 

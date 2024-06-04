@@ -5,11 +5,17 @@ import com.example.myapp.data.Cart;
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
 import com.example.myapp.service.BookService;
+import com.example.myapp.utils.PageUtils;
 import com.example.myapp.utils.SessionUtils;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.myapp.service.SessionService;
 
@@ -68,24 +74,30 @@ public class BookServiceimpl implements BookService{
         return null ; //false
     }
 
-    public Book_Basic_dto[] getList(HttpServletRequest request)
+    public Page<Book_Basic_dto> getList(Pageable pageStatus,HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
-        Book[] result ;
-        Book_Basic_dto[] ret = null ; 
+        Book[] result = null ;
+        Book_Basic_dto[] retList = null ; 
+        Page<Book_Basic_dto> ret = null ; 
         try{
-            result = accessBook.findByPage(1*PAGE_SIZE) ;
-            ret = new Book_Basic_dto[result.length] ; 
+            Page <Book> pageResult = accessBook.findByPage(pageStatus) ; 
+            List<Book> bookList = accessBook.findByPage(pageStatus).toList() ; 
+            result = new Book[bookList.size()] ; 
+            result = (bookList.toArray(result)) ;
+            retList = new Book_Basic_dto[result.length] ; 
             int cnt = 0 ; 
             for (Book book : result ) {
-                ret[cnt] = book.toBasicDto() ; 
+                retList[cnt] = book.toBasicDto() ; 
                 cnt++ ; 
             }
+            ret = PageUtils.toPage(retList, pageStatus, pageResult.getTotalElements()) ; 
         }
         catch(Exception err)
         {
             System.err.println(err);
-            return new Book_Basic_dto[]{}; 
+            err.printStackTrace();
+            return new PageImpl<>(null); 
         }
         return ret ; 
     }
