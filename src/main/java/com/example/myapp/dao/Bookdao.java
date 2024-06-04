@@ -20,7 +20,7 @@ public interface Bookdao {
 
     Book[] SearchByName(String name) ;
 
-    int modifyBook(int book_id , String name , String author , int Storage) ;
+    int modifyBook(int book_id , String name , String author , int Storage ,  String isbn , double price ) ;
     
     int modifyCover(int book_id , String cover) ; 
 

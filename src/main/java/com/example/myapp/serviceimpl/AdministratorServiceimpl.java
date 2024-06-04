@@ -42,7 +42,8 @@ public class AdministratorServiceimpl implements AdministratorService{
         return ret ; 
     }
     public boolean modifyBook(int book_id , String name , 
-        String author , int storage , String cover , HttpServletRequest request) throws PermissionDeniedException
+        String author , int storage , String cover ,
+        String isbn , double price , HttpServletRequest request) throws PermissionDeniedException
     {
         try
         {
@@ -52,7 +53,7 @@ public class AdministratorServiceimpl implements AdministratorService{
             {
                 throw new PermissionDeniedException() ; 
             }
-            accessBook.modifyBook(book_id, name, author, storage) ;
+            accessBook.modifyBook(book_id, name, author, storage , isbn , price) ;
             if(cover!=null)
             {
                 accessBook.modifyCover(book_id, cover) ; 

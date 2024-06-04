@@ -37,9 +37,9 @@ public class Bookdaoimpl implements Bookdao{
         return accessBook.SearchByName(name) ; 
     }
 
-    public int modifyBook(int book_id , String name , String author , int Storage) 
+    public int modifyBook(int book_id , String name , String author , int Storage ,  String isbn , double price ) 
     {
-        return accessBook.modifyBook(book_id, name, author, Storage) ; 
+        return accessBook.modifyBook(book_id, name, author, Storage , isbn , price) ; 
     }
     
     public int modifyCover(int book_id , String cover)

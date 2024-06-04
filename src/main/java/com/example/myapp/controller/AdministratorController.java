@@ -52,11 +52,13 @@ public class AdministratorController {
             }
 
             String name = body.get("name").toString() ; 
+            String isbn = body.get("isbn").toString() ; 
+            double price = Double.parseDouble( body.get("price").toString()) ; 
             String author = body.get("author").toString() ; 
             int storage = Integer.parseInt(body.get("storage").toString()) ; 
             int book_id = Integer.parseInt(body.get("book_id").toString()) ; 
             System.out.println("Input Modify,Storage:" + storage);
-            if(administratorService.modifyBook(book_id , name , author,storage , cover , request))
+            if(administratorService.modifyBook(book_id , name , author,storage , cover ,isbn , price, request))
             {
                 ret.put("state", "true") ; 
                 return ret ; 

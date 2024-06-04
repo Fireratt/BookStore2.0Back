@@ -113,8 +113,8 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
 
     @Modifying
     @Transactional
-    @Query(value = "update Book b set b.Name=?2,b.Author=?3,b.Storage=?4 where b.bookId=?1")
-    int modifyBook(int book_id , String name , String author , int Storage) ;
+    @Query(value = "update Book b set b.Name=?2,b.Author=?3,b.Storage=?4,b.isbn=?5,b.Price=?6 where b.bookId=?1")
+    int modifyBook(int book_id , String name , String author , int Storage, String isbn , double price) ;
     
     @Modifying
     @Transactional

@@ -18,7 +18,8 @@ public interface AdministratorService {
     public Book_dto[] searchBook(String toSearch, HttpServletRequest request) throws PermissionDeniedException ; 
 
     public boolean modifyBook(int book_id , String name , 
-        String author , int storage , String cover , HttpServletRequest request) throws PermissionDeniedException ; 
+        String author , int storage , String cover , 
+        String isbn , double price , HttpServletRequest request) throws PermissionDeniedException ; 
 
     public boolean addBook( String name , String author 
         , int storage , double price,String description, String isbn,String cover , HttpServletRequest request) throws PermissionDeniedException ; 
