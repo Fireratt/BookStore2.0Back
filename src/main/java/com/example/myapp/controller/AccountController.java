@@ -30,8 +30,9 @@ public class AccountController {
 			if(user.size() != 0)
 			{
 				System.out.println(user.get(0).get("ban").toString());
-				if(Boolean.parseBoolean(user.get(0).get("ban").toString())) 
+				if(Integer.parseInt(user.get(0).get("ban").toString())==1) 
 				{
+					System.out.println("Reject");
 					ret.put("State", "Rejected") ; 
 					return ret ; 
 				}

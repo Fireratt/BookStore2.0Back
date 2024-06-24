@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 @Service
 public interface AdministratorService {
 
@@ -32,7 +33,9 @@ public interface AdministratorService {
 
     public List<User> getUserInfo(HttpServletRequest request)throws PermissionDeniedException ;  
 
-    public Page<Order_dto> getAllOrder(int pageNumber , HttpServletRequest request)throws PermissionDeniedException ; 
+    public Page<Order_dto> getAllOrder(Pageable pageStatus , HttpServletRequest request)throws PermissionDeniedException ; 
+    public Page<Order_dto> searchAllOrder(String query,Pageable pageStatus , HttpServletRequest request) throws PermissionDeniedException; 
+    public Page<Order_dto> selectAllOrderByDate(String start , String end , Pageable pageStatus , HttpServletRequest request) throws PermissionDeniedException; 
 
     public boolean banUser(int userId , HttpServletRequest request)throws PermissionDeniedException ; 
     

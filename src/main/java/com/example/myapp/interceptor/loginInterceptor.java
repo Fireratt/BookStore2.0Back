@@ -27,8 +27,10 @@ public class loginInterceptor implements HandlerInterceptor{
             String user_id = SessionUtils.readSession("user_id", request) ; 
             if(user_id != "")
             {
+
                 if(accessUser.checkBan(Integer.parseInt(user_id)))
                 {
+                    response.setStatus(401);
                     return false ; 
                 }
                 return true ; 

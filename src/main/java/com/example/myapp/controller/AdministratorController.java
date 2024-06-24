@@ -10,13 +10,12 @@ import com.example.myapp.service.AdministratorService;
 import com.example.myapp.utils.ByteUtils;
 import com.example.myapp.utils.SessionUtils;
 
-import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.data.domain.Page;
 import jakarta.servlet.http.* ; 
 import com.example.myapp.service.AdministratorService.PermissionDeniedException;
 import com.example.myapp.dto.*;
@@ -223,4 +222,82 @@ public class AdministratorController {
             }
         }    
     }
+
+    @GetMapping("/order")
+    public Page<Order_dto> getAllOrder(@RequestParam int page , HttpServletRequest request ,HttpServletResponse response)
+    {
+        Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 
+        try
+        {
+            return administratorService.getAllOrder(pageStatus, request) ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                return new PageImpl<>(null) ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                return new PageImpl<>(null) ; 
+            }
+        }    
+    }
+
+    @GetMapping("/order/search")
+    public Page<Order_dto> searchAllOrder(@RequestParam Map<String,String> params , HttpServletRequest request , HttpServletResponse response)
+    {
+        int page = Integer.parseInt(params.get("page")) ; 
+        String query = params.get("query") ; 
+        Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 
+        try
+        {
+            return administratorService.searchAllOrder(query, pageStatus, request) ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                return new PageImpl<>(null) ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                return new PageImpl<>(null) ; 
+            }
+        }    
+    }
+
+    @GetMapping("/order/select")
+    public Page<Order_dto> selectAllOrderByDate(@RequestParam Map<String,String> params , HttpServletRequest request , HttpServletResponse response)
+    {
+        int page = Integer.parseInt(params.get("page")) ; 
+        String start = params.get("start") ; 
+        String end =  params.get("end") ; 
+        Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 
+        try
+        {
+            return administratorService.selectAllOrderByDate(start, end, pageStatus, request) ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                return new PageImpl<>(null) ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                return new PageImpl<>(null) ; 
+            }
+        }  
+    } 
+
 }

@@ -94,7 +94,7 @@ import com.example.myapp.data.User;
 // }
 public interface AccessAccount extends JpaRepository<User , Integer>{
 
-    @Query(value="select b.user_id , a.administrator from (select * from user where name = ?1) a join userauth b on a.user_id = b.user_id where b.pwd = ?2" , nativeQuery = true)
+    @Query(value="select b.user_id , a.administrator , a.ban from (select * from user where name = ?1) a join userauth b on a.user_id = b.user_id where b.pwd = ?2" , nativeQuery = true)
     public List<Map> confirmLogin(String userName , String password) ; 
     
     @Modifying

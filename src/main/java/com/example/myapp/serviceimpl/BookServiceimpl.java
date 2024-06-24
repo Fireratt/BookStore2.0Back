@@ -82,7 +82,7 @@ public class BookServiceimpl implements BookService{
         Page<Book_Basic_dto> ret = null ; 
         try{
             Page <Book> pageResult = accessBook.findByPage(pageStatus) ; 
-            List<Book> bookList = accessBook.findByPage(pageStatus).toList() ; 
+            List<Book> bookList = pageResult.toList() ; 
             result = new Book[bookList.size()] ; 
             result = (bookList.toArray(result)) ;
             retList = new Book_Basic_dto[result.length] ; 

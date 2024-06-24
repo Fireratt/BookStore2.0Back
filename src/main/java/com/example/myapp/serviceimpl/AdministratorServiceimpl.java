@@ -1,13 +1,16 @@
 package com.example.myapp.serviceimpl;
 import com.example.myapp.dao.Bookdao;
+import com.example.myapp.dao.Orderdao;
 import com.example.myapp.dao.Userdao;
 import com.example.myapp.data.Book;
 import com.example.myapp.data.Cart;
+import com.example.myapp.data.Order;
 import com.example.myapp.data.User;
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
 import com.example.myapp.dto.Order_dto;
 import com.example.myapp.service.AdministratorService;
+import com.example.myapp.utils.PageUtils;
 import com.example.myapp.utils.SessionUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,9 +22,9 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-
+import org.springframework.data.domain.Pageable;
 import com.example.myapp.service.SessionService;
-
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 @Service
 public class AdministratorServiceimpl implements AdministratorService{
@@ -29,6 +32,8 @@ public class AdministratorServiceimpl implements AdministratorService{
     Bookdao accessBook ; 
     @Autowired
     Userdao accessUser ; 
+    @Autowired
+    Orderdao accessOrder ; 
     public Book_dto[] searchBook(String toSearch, HttpServletRequest request) throws PermissionDeniedException
     {
         int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
@@ -145,17 +150,93 @@ public class AdministratorServiceimpl implements AdministratorService{
         }
     }
 
-    public Page<Order_dto> getAllOrder(int pageNumber , HttpServletRequest request)throws PermissionDeniedException
+    public Page<Order_dto> getAllOrder(Pageable pageStatus , HttpServletRequest request)throws PermissionDeniedException
     {
-        try
-        {
+
             int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
             boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
             if(!isAdministrator)
             {
                 throw new PermissionDeniedException() ; 
             }
+        Order_dto[] retList = null ; 
+        Page<Order_dto> ret = null ; 
+        try
+        {
+            Page<Order> orders = accessOrder.getAllOrder(pageStatus) ; 
+            List<Order> orderList = orders.toList() ; 
+            retList = new Order_dto[orderList.size()] ; 
+            int cnt = 0 ; 
+            for (Order order : orderList) {
+                retList[cnt] = order.toDto() ;
+                cnt ++ ; 
+            }
+            ret = PageUtils.toPage(retList, pageStatus, orders.getTotalElements()) ; 
+            return ret ; 
+        }
+        catch(Exception err)
+        {
+            err.printStackTrace();
+            System.err.println(err);
             return new PageImpl<>(null) ; 
+        }
+    }
+
+    public Page<Order_dto> searchAllOrder(String query,Pageable pageStatus , HttpServletRequest request) throws PermissionDeniedException
+    {
+
+            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
+            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
+            if(!isAdministrator)
+            {
+                throw new PermissionDeniedException() ; 
+            }
+        Order_dto[] retList = null ; 
+        Page<Order_dto> ret = null ; 
+        try
+        {
+            Page<Order> orders = accessOrder.searchAllOrder(query, pageStatus)  ; 
+            List<Order> orderList = orders.toList() ; 
+            retList = new Order_dto[orderList.size()] ; 
+            int cnt = 0 ; 
+            for (Order order : orderList) {
+                retList[cnt] = order.toDto() ;
+                cnt ++ ; 
+            }
+            ret = PageUtils.toPage(retList, pageStatus, orders.getTotalElements()) ; 
+            return ret ; 
+        }
+        catch(Exception err)
+        {
+            err.printStackTrace();
+            System.err.println(err);
+            return new PageImpl<>(null) ; 
+        }
+    }
+
+    public Page<Order_dto> selectAllOrderByDate(String start , String end , Pageable pageStatus , HttpServletRequest request) throws PermissionDeniedException
+    {
+
+            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
+            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
+            if(!isAdministrator)
+            {
+                throw new PermissionDeniedException() ; 
+            }
+        Order_dto[] retList = null ; 
+        Page<Order_dto> ret = null ; 
+        try
+        {
+            Page<Order> orders = accessOrder.selectAllOrderByDate(start, end, pageStatus) ; 
+            List<Order> orderList = orders.toList() ; 
+            retList = new Order_dto[orderList.size()] ; 
+            int cnt = 0 ; 
+            for (Order order : orderList) {
+                retList[cnt] = order.toDto() ;
+                cnt ++ ; 
+            }
+            ret = PageUtils.toPage(retList, pageStatus, orders.getTotalElements()) ; 
+            return ret ; 
         }
         catch(Exception err)
         {

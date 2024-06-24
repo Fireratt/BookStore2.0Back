@@ -11,9 +11,11 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import com.example.myapp.BookList;
 import com.example.myapp.repository.AccessOrder;
+import org.springframework.data.domain.Pageable;
 import com.example.myapp.dao.*;
 import com.example.myapp.data.*;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
 @Repository
 
 public class Orderdaoimpl implements Orderdao{
@@ -54,4 +56,19 @@ public class Orderdaoimpl implements Orderdao{
     {
         return accessOrder.selectOrderByDate(user_id, start, end) ; 
     }
+
+    public Page<Order> getAllOrder(Pageable pageStatus)
+    {
+        return accessOrder.getAllOrder(pageStatus) ; 
+    }
+
+    public Page<Order> searchAllOrder(String query , Pageable pageStatus)
+    {
+        return accessOrder.searchAllOrder(query , pageStatus) ; 
+    }
+    public Page<Order> selectAllOrderByDate(String start , String end , Pageable pageStatus)
+    {
+        return accessOrder.selectAllOrderByDate(start, end , pageStatus) ; 
+    }
+
 }

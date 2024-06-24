@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.myapp.data.Order;
 import jakarta.servlet.http.* ; 
 import com.example.myapp.data.OrderItem;
 import com.example.myapp.dto.OrderStatistic_dto;

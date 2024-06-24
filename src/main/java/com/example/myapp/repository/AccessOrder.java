@@ -12,6 +12,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.example.myapp.BookList;
 import com.example.myapp.data.Book;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -140,4 +142,13 @@ public interface AccessOrder extends JpaRepository<Order , Integer>{
 
     @Query(value = "select a from Order a where a.userId = ?1 and a.date between ?2 and ?3")
     Order[] selectOrderByDate(int user_id , String start , String end) ; 
+
+    @Query(value="select a from Order a")
+    public Page<Order> getAllOrder(Pageable pageStatus) ; 
+
+    @Query(value = "select a from Order a join OrderItem b on a.orderId = b.order_id where b.book.Name like %?1%")
+    Page<Order> searchAllOrder(String query , Pageable pageStatus) ; 
+
+    @Query(value = "select a from Order a where a.date between ?1 and ?2")
+    Page<Order> selectAllOrderByDate(String start , String end , Pageable pageStatus) ; 
 }

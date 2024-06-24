@@ -12,6 +12,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import com.example.myapp.BookList;
 import com.example.myapp.data.*;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 public interface Orderdao {
     public Order[] getOrderList(int user_id) ; 
     
@@ -26,4 +28,10 @@ public interface Orderdao {
     Order[] searchOrder(int user_id , String query) ; 
 
     Order[] selectOrderByDate(int user_id , String start , String end) ; 
+
+    public Page<Order> getAllOrder(Pageable pageStatus) ; 
+
+    public Page<Order> selectAllOrderByDate(String start , String end , Pageable pageStatus) ; 
+    
+    public Page<Order> searchAllOrder(String query , Pageable pageStatus) ; 
 }
