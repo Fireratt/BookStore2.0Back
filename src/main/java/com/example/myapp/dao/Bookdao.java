@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate ; 
 import com.example.myapp.BookList;
 import com.example.myapp.data.Book;
+import com.example.myapp.dto.Book_Basic_dto;
+import com.example.myapp.service.AdministratorService.PermissionDeniedException;
 
 public interface Bookdao {
 
@@ -31,4 +33,4 @@ public interface Bookdao {
     Integer checkStorage(int book_id , int number) ; 
 
     int updateStorage(int book_id , int number) ; 
-}   
+}

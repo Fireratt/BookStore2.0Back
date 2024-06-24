@@ -14,6 +14,9 @@ import org.springframework.data.jpa.repository.Query;
 import javax.annotation.Resource;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration ;
 import com.example.myapp.data.User; 
+import org.springframework.data.jpa.repository.Modifying;
+import jakarta.transaction.Transactional;
+
 // @Repository
 // public class AccessUser{
 //     @Autowired
@@ -51,4 +54,20 @@ public interface AccessUser extends JpaRepository<User , Integer>{
 
     @Query(value = "select u.administrator from User u where u.id = ?1")
     boolean checkAdministrator(int id) ; 
+
+    @Query(value = "select u.ban from User u where u.id = ?1")
+    boolean checkBan(int id) ; 
+    
+    @Query(value="select u from User u")
+    public List<User> getUserInfo() ; 
+
+    @Modifying
+    @Transactional
+    @Query(value="update User u set u.ban=true where u.id = ?1")
+    public int banUser(int user_id) ; 
+
+    @Modifying
+    @Transactional
+    @Query(value="update User u set u.ban=false where u.id = ?1")
+    public int unbanUser(int user_id) ; 
 }

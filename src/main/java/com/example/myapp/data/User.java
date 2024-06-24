@@ -30,6 +30,11 @@ public class User {
     @Basic
     @Column(name = "administrator")
     private boolean administrator ; 
+
+    @Basic 
+    @Column(name = "ban")
+    private boolean ban ; 
+
     public User(Map<String,Object> data)
     {
         id = Integer.parseInt(data.get("userid").toString()) ; 

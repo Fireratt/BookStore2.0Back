@@ -131,7 +131,7 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Query(value = "update Book b set b.valid=0 where b.bookId=?1")
     int deleteBook(int book_id) ; 
 
-    @Query(value = "select b.bookId from Book b where b.bookId = ?1 and b.Storage > ?2")
+    @Query(value = "select b.bookId from Book b where b.bookId = ?1 and b.Storage >= ?2")
     Integer checkStorage(int book_id , int number) ; 
 
     @Modifying

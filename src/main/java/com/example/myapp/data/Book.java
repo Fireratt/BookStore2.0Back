@@ -33,7 +33,8 @@ public class Book
 	@Column(name="storage") 
 	private int Storage ; 
 
-	@Column(name="real_price") 
+	// @Column(name="real_price") 
+	@Transient
     private double RealPrice ; 
 
 	@Column(name = "isbn")

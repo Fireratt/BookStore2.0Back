@@ -8,6 +8,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 // import java.io.Console;
 import java.util.*;
 
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate ;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,6 +23,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException ;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -107,4 +109,6 @@ public interface AccessAccount extends JpaRepository<User , Integer>{
     @Transactional
     @Query(value="insert into userauth(user_id,pwd) values(?1 , ?2)", nativeQuery = true)
     public void saveAuth(int user_id , String pwd) throws DataIntegrityViolationException; 
+
+
 }

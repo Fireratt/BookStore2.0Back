@@ -23,17 +23,32 @@ public class AccountController {
 		String password = Account.get("password") ;  
 		System.out.println("Get Request:" + userName+ ":" + password);
 		HashMap<String,String> ret = new HashMap<>() ; 
-		List<Map> user = accessAccount.confirmLogin(userName, password); 
-		System.out.println("Result" + user.get(0).get("user_id"));
-        if(user.size() != 0)
+		try
 		{
-			ret.put("State", "Success") ; 
-			ret.put("Administrator" , user.get(0).get("administrator").toString()) ; 
-			SessionUtils.setSession(new UserAuth(user.get(0).get("user_id").toString()), request);
-			return ret ; 
+			List<Map> user = accessAccount.confirmLogin(userName, password); 
+			System.out.println("Result" + user.get(0).get("user_id"));
+			if(user.size() != 0)
+			{
+				System.out.println(user.get(0).get("ban").toString());
+				if(Boolean.parseBoolean(user.get(0).get("ban").toString())) 
+				{
+					ret.put("State", "Rejected") ; 
+					return ret ; 
+				}
+				ret.put("State", "Success") ; 
+				ret.put("Administrator" , user.get(0).get("administrator").toString()) ; 
+				SessionUtils.setSession(new UserAuth(user.get(0).get("user_id").toString()), request);
+				return ret ; 
+			}
+			else
+			{
+				ret.put("State", "Failed") ; 
+				return ret ; 
+			}
 		}
-		else
+		catch(Exception err)
 		{
+			err.printStackTrace();
 			ret.put("State", "Failed") ; 
 			return ret ; 
 		}

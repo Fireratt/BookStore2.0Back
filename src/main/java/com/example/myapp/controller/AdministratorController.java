@@ -3,13 +3,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
+
+import com.example.myapp.data.User;
 import com.example.myapp.data.UserAuth;
 import com.example.myapp.service.AdministratorService;
 import com.example.myapp.utils.ByteUtils;
 import com.example.myapp.utils.SessionUtils;
 
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import jakarta.servlet.http.* ; 
 import com.example.myapp.service.AdministratorService.PermissionDeniedException;
 import com.example.myapp.dto.*;
@@ -19,6 +26,7 @@ public class AdministratorController {
     @Autowired
     AdministratorService administratorService ; 
 
+    static final int PAGE_SIZE = 8 ; 
     @GetMapping("/book")
     Book_dto[] searchBook(@RequestParam Map<String , String> params , HttpServletRequest request , HttpServletResponse response)
     {
@@ -100,8 +108,9 @@ public class AdministratorController {
             int storage = Integer.parseInt(body.get("storage").toString()) ; 
             String description = body.get("description").toString() ; 
             String isbn =  body.get("isbn").toString() ; 
+            System.out.println("AddBook:isbn:" + isbn);
             Double price =Double.parseDouble(body.get("price").toString()) ; 
-            if(administratorService.addBook(name , author , storage, price , isbn , description , cover , request))
+            if(administratorService.addBook(name , author , storage, price ,  description ,isbn , cover , request))
             {
                 ret.put("state", "true") ; 
                 return ret ; 
@@ -159,4 +168,59 @@ public class AdministratorController {
         }
     }
 
+    @GetMapping("/user")
+    public List<User> getUserInfo(HttpServletRequest request , HttpServletResponse response)
+    {
+        List<User> ret = null;
+        try{
+            ret = administratorService.getUserInfo(request) ; 
+            return ret ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                return null ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                return null ; 
+            }
+        }
+    }
+
+    @PutMapping("/user")
+    public boolean handleBan(@RequestBody Map<String,String>body , HttpServletRequest request , HttpServletResponse response)
+    {
+        boolean ban = Boolean.parseBoolean(body.get("ban")) ;
+        int user_id =Integer.parseInt( body.get("user_id") );
+        try
+        {
+            if(ban)
+            {
+                return administratorService.banUser(user_id, request) ; 
+            } 
+            else
+            {
+                return administratorService.unbanUser(user_id, request) ; 
+            }
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                return false ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                return false ; 
+            }
+        }    
+    }
 }
