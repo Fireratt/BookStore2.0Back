@@ -47,10 +47,11 @@ public interface AdministratorService {
 
     public List<Map> getBookRank(String start , String end , Pageable pageStatus , HttpServletRequest request) throws PermissionDeniedException ; 
 
+    public List<Map> getUserRank(String start , String end , HttpServletRequest request) throws PermissionDeniedException ; 
+
     public class PermissionDeniedException extends Exception
     {
         public final String message = "Not the administrator , Permission Denied" ; 
     }
 
-    
 }

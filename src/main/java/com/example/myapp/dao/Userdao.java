@@ -18,4 +18,5 @@ public interface Userdao {
 
     int unbanUser(int id) ; 
     
+    List<Map> getUserRank(String start , String end) ; 
 }

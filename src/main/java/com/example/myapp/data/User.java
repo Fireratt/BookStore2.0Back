@@ -7,6 +7,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 @Entity 
 @Table(name = "user")
+@NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(name = "getUserRank" , procedureName="get_user_rank" , parameters = {
+		@StoredProcedureParameter(mode = ParameterMode.IN , name = "start" , type = String.class),
+		@StoredProcedureParameter(mode = ParameterMode.IN , name = "end" , type = String.class)
+	})
+})
+
 @Data
 public class User {
     @Id

@@ -70,4 +70,8 @@ public interface AccessUser extends JpaRepository<User , Integer>{
     @Transactional
     @Query(value="update User u set u.ban=false where u.id = ?1")
     public int unbanUser(int user_id) ; 
+
+    @Transactional
+    @Query(value="call bookdb.get_user_rank(?1, ?2)" , nativeQuery = true)
+    public List<Map> getUserRank(String start , String end) ; 
 }

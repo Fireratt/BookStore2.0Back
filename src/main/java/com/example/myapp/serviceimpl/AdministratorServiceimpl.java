@@ -328,5 +328,25 @@ public class AdministratorServiceimpl implements AdministratorService{
             return null ; 
         }
     }
+    @Transactional
+    public List<Map> getUserRank(String start , String end , HttpServletRequest request) throws PermissionDeniedException
+    {
+        int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
+        boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
+        if(!isAdministrator)
+        {
+            throw new PermissionDeniedException() ; 
+        }
+        try
+        {
+            return accessUser.getUserRank(start , end ) ; 
+        }
+        catch(Exception err)
+        {
+            err.printStackTrace();
+            System.err.println(err);
+            return null ; 
+        }
+    }
 
 }

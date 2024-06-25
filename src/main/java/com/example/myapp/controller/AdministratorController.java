@@ -315,7 +315,7 @@ public class AdministratorController {
     @GetMapping("/bookRank")
     public List<Map> getBookRank(@RequestParam Map<String,String> params , HttpServletRequest request , HttpServletResponse response)
     {
-        int page = Integer.parseInt(params.get("page")) ; 
+        int page = 0 ; 
         String start = params.get("start") ; 
         if(start == "")
         {
@@ -346,5 +346,36 @@ public class AdministratorController {
             }
         }  
     }
-
+    @GetMapping("/userRank")
+    public List<Map> getUserRank(@RequestParam Map<String,String> params ,HttpServletRequest request , HttpServletResponse response)
+    {
+        String start = params.get("start") ; 
+        if(start == "")
+        {
+            start = DEFAULT_START ;  // default value ; 
+        }
+        String end = params.get("end") ; 
+        if(end == "")
+        {
+            end = DEFAULT_END ;  // default value ; 
+        }
+        try
+        {
+            return administratorService.getUserRank(start, end, request) ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                return null ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                return null ; 
+            }
+        }  
+    }
 }

@@ -33,4 +33,10 @@ public class Userdaoimpl implements Userdao{
     {
         return accessUser.getUserInfo() ; 
     }
+
+    public List<Map> getUserRank(String start , String end)
+    {
+        return accessUser.getUserRank(start, end) ; 
+    }
+
 }
