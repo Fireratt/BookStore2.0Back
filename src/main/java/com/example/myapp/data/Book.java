@@ -2,15 +2,25 @@ package com.example.myapp.data ;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.example.myapp.dto.BookRank;
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
 import com.example.myapp.utils.ByteUtils;
 
 import ch.qos.logback.core.encoder.ByteArrayUtil;
 import lombok.Data;
+import jakarta.persistence.NamedStoredProcedureQueries;
+import jakarta.persistence.NamedStoredProcedureQuery;
 @Data
 @Entity 
 @Table(name = "book" ,schema = "bookdb")
+// Add the stored procedure
+@NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(name = "getBookRank" , procedureName="get_book_rank" , parameters = {
+		@StoredProcedureParameter(mode = ParameterMode.IN , name = "start" , type = String.class),
+		@StoredProcedureParameter(mode = ParameterMode.IN , name = "end" , type = String.class)
+	})
+})
 public class Book
 {
 	@Id 

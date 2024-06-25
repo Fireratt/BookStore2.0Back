@@ -3,6 +3,7 @@ import com.example.myapp.data.Book;
 import com.example.myapp.data.Cart;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.User;
+import com.example.myapp.dto.BookRank;
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
 import com.example.myapp.dto.Order_dto;
@@ -11,6 +12,7 @@ import com.example.myapp.utils.SessionUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +43,9 @@ public interface AdministratorService {
     
     public boolean unbanUser(int userId , HttpServletRequest request)throws PermissionDeniedException ; 
 
-    public Page<Book_Basic_dto> getBookRanking(int pageNumber , String start , String end , HttpServletRequest request) throws PermissionDeniedException ; 
-
     public List<User> getUserRanking(String start , String end , HttpServletRequest request) throws PermissionDeniedException ; 
+
+    public List<Map> getBookRank(String start , String end , Pageable pageStatus , HttpServletRequest request) throws PermissionDeniedException ; 
 
     public class PermissionDeniedException extends Exception
     {

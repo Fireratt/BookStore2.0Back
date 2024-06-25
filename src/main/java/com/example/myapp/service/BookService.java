@@ -5,6 +5,7 @@ import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
 import com.example.myapp.utils.SessionUtils;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,4 +28,6 @@ public interface BookService {
     public Page<Book_Basic_dto> getList(Pageable pageStatus,HttpServletRequest request) ; 
     
     public Book_Basic_dto[] searchBook(String query , HttpServletRequest request) ; 
+
+
 }

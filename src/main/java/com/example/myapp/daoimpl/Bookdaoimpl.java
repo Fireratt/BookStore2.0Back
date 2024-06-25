@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate ;
 import com.example.myapp.BookList;
 import com.example.myapp.dao.Bookdao;
 import com.example.myapp.data.Book;
+import com.example.myapp.dto.BookRank;
 import com.example.myapp.repository.AccessBook;
 @Repository
 
@@ -66,4 +67,9 @@ public class Bookdaoimpl implements Bookdao{
     {
         return accessBook.updateStorage(book_id, number) ; 
     }
-}   
+
+    public List<Map> getBookRank(String start , String end,Pageable pageStatus)
+    {
+        return accessBook.getBookRank(start , end ) ; 
+    }
+}    

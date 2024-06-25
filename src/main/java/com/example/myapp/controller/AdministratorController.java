@@ -25,7 +25,10 @@ public class AdministratorController {
     @Autowired
     AdministratorService administratorService ; 
 
-    static final int PAGE_SIZE = 8 ; 
+    static final int PAGE_SIZE = 4 ; 
+    static final String DEFAULT_START = "1970-01-01" ; 
+    static final String DEFAULT_END = "2035-01-01" ; 
+
     @GetMapping("/book")
     Book_dto[] searchBook(@RequestParam Map<String , String> params , HttpServletRequest request , HttpServletResponse response)
     {
@@ -278,7 +281,16 @@ public class AdministratorController {
     {
         int page = Integer.parseInt(params.get("page")) ; 
         String start = params.get("start") ; 
-        String end =  params.get("end") ; 
+        if(start == "")
+        {
+            start = DEFAULT_START ;  // default value ; 
+        }
+        String end = params.get("end") ; 
+        if(end == "")
+        {
+            end = DEFAULT_END ;  // default value ; 
+        }
+        System.out.println("Start:" + start);
         Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 
         try
         {
@@ -299,5 +311,40 @@ public class AdministratorController {
             }
         }  
     } 
+
+    @GetMapping("/bookRank")
+    public List<Map> getBookRank(@RequestParam Map<String,String> params , HttpServletRequest request , HttpServletResponse response)
+    {
+        int page = Integer.parseInt(params.get("page")) ; 
+        String start = params.get("start") ; 
+        if(start == "")
+        {
+            start = DEFAULT_START ;  // default value ; 
+        }
+        String end = params.get("end") ; 
+        if(end == "")
+        {
+            end = DEFAULT_END ;  // default value ; 
+        }        
+        Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 
+        try
+        {
+            return administratorService.getBookRank(start, end, pageStatus, request) ; 
+        }
+        catch(PermissionDeniedException e)
+        {
+            try
+            {
+                System.out.println(e.message);
+                response.sendError(403) ; 
+                return null ; 
+            }
+            catch(Exception err)
+            {
+                System.out.println(err);
+                return null ; 
+            }
+        }  
+    }
 
 }

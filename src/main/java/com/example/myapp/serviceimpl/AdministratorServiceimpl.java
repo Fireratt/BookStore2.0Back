@@ -6,6 +6,7 @@ import com.example.myapp.data.Book;
 import com.example.myapp.data.Cart;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.User;
+import com.example.myapp.dto.BookRank;
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.dto.Book_dto;
 import com.example.myapp.dto.Order_dto;
@@ -14,9 +15,11 @@ import com.example.myapp.utils.PageUtils;
 import com.example.myapp.utils.SessionUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,27 +288,6 @@ public class AdministratorServiceimpl implements AdministratorService{
         return false ; 
     }
     }
-    public Page<Book_Basic_dto> getBookRanking(int pageNumber , String start , String end , HttpServletRequest request) throws PermissionDeniedException
-    {
-
-        int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
-        boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
-        if(!isAdministrator)
-        {
-            throw new PermissionDeniedException() ; 
-        }
-        try
-        {
-            return new PageImpl<>(null) ; 
-        }
-        catch(Exception err)
-        {
-            err.printStackTrace();
-            System.err.println(err);
-            return new PageImpl<>(null) ; 
-        }
-    }
-
     public List<User> getUserRanking(String start , String end , HttpServletRequest request) throws PermissionDeniedException
     {
 
@@ -326,5 +308,25 @@ public class AdministratorServiceimpl implements AdministratorService{
             return new ArrayList<User>() ; 
         }
     }
-    
+    @Transactional
+    public List<Map> getBookRank(String start , String end , Pageable pageStatus , HttpServletRequest request) throws PermissionDeniedException  
+    {
+            int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
+            boolean isAdministrator = accessUser.checkAdministrator(user_id) ; 
+            if(!isAdministrator)
+            {
+                throw new PermissionDeniedException() ; 
+            }
+        try
+        {
+            return accessBook.getBookRank(start , end ,pageStatus) ; 
+        }
+        catch(Exception err)
+        {
+            err.printStackTrace();
+            System.err.println(err);
+            return null ; 
+        }
+    }
+
 }

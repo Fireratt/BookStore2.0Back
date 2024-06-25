@@ -6,9 +6,11 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate ; 
 import com.example.myapp.BookList;
 import com.example.myapp.data.Book;
+import com.example.myapp.dto.BookRank;
 import com.example.myapp.dto.Book_Basic_dto;
 import com.example.myapp.service.AdministratorService.PermissionDeniedException;
 
@@ -33,4 +35,7 @@ public interface Bookdao {
     Integer checkStorage(int book_id , int number) ; 
 
     int updateStorage(int book_id , int number) ; 
+
+    List<Map> getBookRank(String start , String end,Pageable pageStatus) ; 
+
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate ; 
 import com.example.myapp.BookList;
 import com.example.myapp.data.Book;
+import com.example.myapp.dto.BookRank;
 
 import jakarta.transaction.Transactional;
 
@@ -24,6 +25,8 @@ import org.springframework.data.jpa.repository.Query;
 // public class AccessBook {
 //     @Autowired
 //     private JdbcTemplate jdbcTemplate ; 
+import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.query.Param;
 
 //     // once the getBookList can return ; it is used as the book's number of one page as well 
 //     static final int MAXBOOKNUM = 30 ; 
@@ -138,4 +141,9 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Transactional
     @Query(value = "update Book b set b.Storage=b.Storage-?2 where b.bookId=?1")
     int updateStorage(int book_id , int number) ; 
+
+    // @Procedure(name = "getBookRank")
+    @Transactional
+    @Query(value="call bookdb.get_book_rank(?1, ?2)" ,nativeQuery=true)
+    List<Map> getBookRank(@Param("start") String start , @Param("end") String end) ; 
 }   
