@@ -27,9 +27,9 @@ public class Orderdaoimpl implements Orderdao{
         return accessOrder.getOrderList(user_id) ; 
     }
     
-    public void save(int userId , String date)
+    public void save(Order order) 
     {
-        accessOrder.save(userId, date);
+        accessOrder.save(order);
     }
 
     public String[] getOrderItem(int order_id)

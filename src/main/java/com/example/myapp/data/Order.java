@@ -20,7 +20,7 @@ public class Order {
     private int orderId ; 
     
     @Basic
-    @Column(name="user_id" , insertable = false , updatable = false)
+    @Column(name="user_id")
     private int userId ; 
 
     @Column(name = "order_time")
@@ -70,7 +70,7 @@ public class Order {
         orderItems.add(newItem) ; 
     }
 
-    Order()
+    public Order()
     {
     }
 

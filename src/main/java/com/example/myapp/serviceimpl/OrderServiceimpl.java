@@ -73,8 +73,14 @@ public class OrderServiceimpl implements OrderService
                     throw new StorageNotEnoughException(book_id) ; 
                 }
             }
-            accessOrder.save(user_id,result.getDate()) ;
-            int orderId = accessOrder.getNewOrderId() ; 
+            Order mid = new Order() ; 
+            mid.setDate(result.getDate());
+            mid.setUserId(user_id);
+            System.out.println(mid.getUserId());
+            accessOrder.save(mid) ;
+            int id = mid.getOrderId() ; 
+            System.out.println(id) ; 
+            int orderId = id ; 
 
             int itemNum = items.size() ; 
             for(int i = 0 ; i < itemNum ; i++)

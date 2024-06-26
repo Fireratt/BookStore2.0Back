@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 public interface Orderdao {
     public Order[] getOrderList(int user_id) ; 
     
-    public void save(int userId , String date) ; 
+    public void save(Order order) ; 
 
     public String[] getOrderItem(int order_id) ; 
 
