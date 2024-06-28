@@ -30,11 +30,14 @@ public class AdministratorController {
     static final String DEFAULT_END = "2035-01-01" ; 
 
     @GetMapping("/book")
-    Book_dto[] searchBook(@RequestParam Map<String , String> params , HttpServletRequest request , HttpServletResponse response)
+    Page<Book_dto> searchBook(@RequestParam Map<String , String> params , HttpServletRequest request , HttpServletResponse response)
     {
         String name = params.get("bookname") ; 
+        int page = Integer.parseInt( params.get("page")) ; 
+        Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 
+
         try {
-            return administratorService.searchBook(name, request) ; 
+            return administratorService.searchBook(name, pageStatus,request) ; 
         } catch (PermissionDeniedException e) {
             try
             {
@@ -45,7 +48,7 @@ public class AdministratorController {
                 System.out.println(err);
             }
         }
-        return new Book_dto[]{} ; 
+        return null ; 
 
     }
     @PostMapping("/book")

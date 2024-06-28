@@ -102,24 +102,27 @@ public class BookServiceimpl implements BookService{
         return ret ; 
     }
 
-    public Book_Basic_dto[] searchBook(String query , HttpServletRequest request)
+    public Page<Book_Basic_dto> searchBook(String query ,Pageable pageStatus, HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
-        Book[] result ;
-        Book_Basic_dto[] ret = null ; 
+        List<Book> result ;
+        Book_Basic_dto[] arrayRet = null ; 
+        Page<Book_Basic_dto> ret = null ; 
         try{
-            result = accessBook.SearchByName(query) ; 
-            ret = new Book_Basic_dto[result.length] ; 
+            Page <Book> pageResult = accessBook.SearchByName(query,pageStatus) ; 
+            result = pageResult.toList() ; 
+            arrayRet = new Book_Basic_dto[result.size()] ; 
             int cnt = 0 ; 
             for (Book book : result ) {
-                ret[cnt] = book.toBasicDto() ; 
+                arrayRet[cnt] = book.toBasicDto() ; 
                 cnt++ ; 
             }
+            ret = PageUtils.toPage(arrayRet, pageStatus, pageResult.getTotalElements()) ; 
         }
         catch(Exception err)
         {
             System.err.println(err);
-            return new Book_Basic_dto[]{}; 
+            return null; 
         }
         return ret ; 
     }

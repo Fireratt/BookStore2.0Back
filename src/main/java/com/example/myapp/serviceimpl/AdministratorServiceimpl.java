@@ -37,7 +37,7 @@ public class AdministratorServiceimpl implements AdministratorService{
     Userdao accessUser ; 
     @Autowired
     Orderdao accessOrder ; 
-    public Book_dto[] searchBook(String toSearch, HttpServletRequest request) throws PermissionDeniedException
+    public Page<Book_dto> searchBook(String toSearch, Pageable pageStatus,HttpServletRequest request) throws PermissionDeniedException
     {
         int user_id =Integer.parseInt(SessionUtils.readSession("user_id", request)) ; 
         // check if current User is administrator.
@@ -46,13 +46,15 @@ public class AdministratorServiceimpl implements AdministratorService{
         {
             throw new PermissionDeniedException() ; 
         }
-        Book[] result = accessBook.SearchByName(toSearch) ; 
-        Book_dto[] ret = new Book_dto[result.length] ;
+        Page<Book> result = accessBook.SearchByName(toSearch,pageStatus) ; 
+        List<Book> resultList = result.toList() ; 
+        Book_dto[] retList = new Book_dto[resultList.size()] ;
         int cnt = 0 ;  
         for (Book book : result) {
-            ret[cnt] = book.toDto() ; 
+            retList[cnt] = book.toDto() ; 
             cnt++ ; 
         }
+        Page<Book_dto> ret = PageUtils.toPage(retList, pageStatus, result.getTotalElements()) ; 
         return ret ; 
     }
     public boolean modifyBook(int book_id , String name , 

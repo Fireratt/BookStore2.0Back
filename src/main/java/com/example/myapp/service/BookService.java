@@ -27,7 +27,7 @@ public interface BookService {
 
     public Page<Book_Basic_dto> getList(Pageable pageStatus,HttpServletRequest request) ; 
     
-    public Book_Basic_dto[] searchBook(String query , HttpServletRequest request) ; 
+    public Page<Book_Basic_dto> searchBook(String query ,Pageable pageStatus, HttpServletRequest request) ; 
 
 
 }

@@ -65,13 +65,18 @@ public class OrderServiceimpl implements OrderService
             result.setUserId(user_id);
             // should first check the storage is enough
             List<OrderItem> items = result.getOrderItems() ; 
-            for(int i = 0 ; i < items.size() ; i++)
-            {
-                int book_id = items.get(i).getBook_id() ; 
-                if(accessBook.checkStorage(book_id,  items.get(i).getAmount()) == null)
+            try{
+                for(int i = 0 ; i < items.size() ; i++)
                 {
-                    throw new StorageNotEnoughException(book_id) ; 
+                    int book_id = items.get(i).getBook_id() ; 
+                    if(accessBook.checkStorage(book_id,  items.get(i).getAmount()) == null)
+                    {
+                        throw new StorageNotEnoughException(book_id) ; 
+                    }
                 }
+            }catch(Exception err)
+            {
+                throw new StorageNotEnoughException(0) ; 
             }
             Order mid = new Order() ; 
             mid.setDate(result.getDate());

@@ -22,7 +22,7 @@ import org.springframework.data.domain.Pageable;
 @Service
 public interface AdministratorService {
 
-    public Book_dto[] searchBook(String toSearch, HttpServletRequest request) throws PermissionDeniedException ; 
+    public Page<Book_dto> searchBook(String toSearch, Pageable pageStatus, HttpServletRequest request) throws PermissionDeniedException ; 
 
     public boolean modifyBook(int book_id , String name , 
         String author , int storage , String cover , 

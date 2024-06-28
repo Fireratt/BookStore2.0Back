@@ -22,7 +22,7 @@ public interface Bookdao {
 
     Book save(Book result) ; 
 
-    Book[] SearchByName(String name) ;
+    Page<Book> SearchByName(String name, Pageable pageStatus) ;
 
     int modifyBook(int book_id , String name , String author , int Storage ,  String isbn , double price ) ;
     

@@ -32,7 +32,7 @@ public interface OrderService {
 
     public class StorageNotEnoughException extends Exception
     {
-        public static final String message = "This book is not enough for this order" ;
+        public static final String message = "This book is not enough for this order , Or the book have been deleted" ;
         public int book_id ; 
         public StorageNotEnoughException(int book_id)
         {

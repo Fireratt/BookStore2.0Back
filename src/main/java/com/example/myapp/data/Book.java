@@ -1,5 +1,7 @@
 package com.example.myapp.data ; 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.example.myapp.dto.BookRank;
@@ -35,7 +37,7 @@ public class Book
 	private String Name ; 
 
 	@Column(name="price") 
-    private double Price ; 
+    private BigDecimal Price ; 
 
 	@Column(name="description") 
 	private String Description ; 
@@ -64,7 +66,7 @@ public class Book
 	{
 		this.bookId = Book_Id ; 
 		this.Name = iName ; 
-		this.Price = iPrice ; 
+		this.Price = new BigDecimal(iPrice) ; 
 		Author = iAuthor ; 
 		Description = iDescription ; 
         Storage = iStorage ; 

@@ -107,12 +107,13 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Query(value = "select b from Book b where b.valid=1")
     Page<Book> findByPage(Pageable pageStatus) ; 
 
+    @Query(value = "select b from Book b where b.valid=1 and b.bookId=?1")
     Book findByBookId(int Book_Id) ; 
     @Modifying
     Book save(Book result) ; 
 
     @Query(value = "select b from Book b where b.Name like %?1% and b.valid=1")
-    Book[] SearchByName(String name) ;
+    Page<Book> SearchByName(String name ,Pageable pageStatus) ;
 
     @Modifying
     @Transactional
@@ -134,7 +135,7 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Query(value = "update Book b set b.valid=0 where b.bookId=?1")
     int deleteBook(int book_id) ; 
 
-    @Query(value = "select b.bookId from Book b where b.bookId = ?1 and b.Storage >= ?2")
+    @Query(value = "select b.bookId from Book b where b.bookId = ?1 and b.Storage >= ?2 and b.valid=1")
     Integer checkStorage(int book_id , int number) ; 
 
     @Modifying

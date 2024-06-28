@@ -56,10 +56,13 @@ public class BookController {
 		return ret ; 
 	}
 	@GetMapping("/book/search")
-	public Book_Basic_dto[] searchBook(@RequestParam Map<String,String> param , HttpServletRequest request)
+	public Page<Book_Basic_dto> searchBook(@RequestParam Map<String,String> param , HttpServletRequest request)
 	{
         String name = param.get("bookname") ; 
-        return accessBook.searchBook(name, request) ; 
+		int page = Integer.parseInt( param.get("page")) ; 
+		Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 
+
+        return accessBook.searchBook(name,pageStatus, request) ; 
 	}
 }
 
