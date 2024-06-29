@@ -1,4 +1,5 @@
 package com.example.myapp.data;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class Order {
     // private User user ; 
 
     @Transient
-    private double totalPrice ;        // will calculated when initialized 
+    private BigDecimal totalPrice ;        // will calculated when initialized 
  
     public Order(int order_id , int user_id ,List<OrderItem> orderItems , String iDate)
     {
@@ -56,17 +57,17 @@ public class Order {
         setOrderItems(orderItems);
 
         int size = orderItems.size() ; 
-        totalPrice = 0 ; 
+        totalPrice = new BigDecimal(0); 
         for(int i = 0 ; i < size ; i++)
         {
             OrderItem item = orderItems.get(i) ; 
-            totalPrice = totalPrice + item.getAmount() *item.getPrice() ; 
+            totalPrice.add(item.getPrice().multiply(new BigDecimal(item.getAmount()))) ; 
         }
     }
     // append the orderItem ; recalculate the price
     public void insertOrderItem(OrderItem newItem)
     {
-        totalPrice = totalPrice + newItem.getAmount() *newItem.getPrice() ; 
+        totalPrice.add(newItem.getPrice().multiply(new BigDecimal(newItem.getAmount()))) ; 
         orderItems.add(newItem) ; 
     }
 

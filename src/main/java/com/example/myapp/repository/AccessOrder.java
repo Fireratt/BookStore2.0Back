@@ -3,6 +3,7 @@ package com.example.myapp.repository;
 import org.springframework.stereotype.* ;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,7 +135,7 @@ public interface AccessOrder extends JpaRepository<Order , Integer>{
     @Modifying
     @Transactional
     @Query(value = "insert into orderitem(order_id , book_id , amount , price) values(?1 , ?2 , ?3 , ?4)" , nativeQuery = true)
-    int saveOrderItem(int order_id , int book_id , int amount , int price) ;  
+    int saveOrderItem(int order_id , int book_id , int amount , BigDecimal price) ;  
 
     @Query(value = "select a from Order a join OrderItem b on a.orderId = b.order_id and userId = ?1 where b.book.Name like %?2%")
     Order[] searchOrder(int user_id , String query) ; 

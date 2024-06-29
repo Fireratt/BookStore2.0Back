@@ -1,5 +1,6 @@
 package com.example.myapp.dto;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Order_dto {
  
     private List<OrderItem_dto> orderItems ; 
 
-    private double totalPrice ;        // will calculated when initialized 
+    private String totalPrice ;        // will calculated when initialized 
  
     public Order_dto(int order_id , int user_id ,List<OrderItem_dto> orderItems , String iDate)
     {
@@ -40,11 +41,15 @@ public class Order_dto {
         setOrderItems(orderItems);
 
         int size = orderItems.size() ; 
-        totalPrice = 0 ; 
+        BigDecimal ret = new BigDecimal(0); 
         for(int i = 0 ; i < size ; i++)
         {
             OrderItem_dto item = orderItems.get(i) ; 
-            totalPrice = totalPrice + item.getAmount() *item.getPrice() ; 
+            ret = ret.add(item.getPrice().multiply(new BigDecimal(item.getAmount()))) ; 
+            // System.out.println("Order_Dto ret:" + ret.toString());
+            // System.out.println("Order_Dto price:" + (item.getPrice().multiply(new BigDecimal(item.getAmount()))).toString());
         }
+        // System.out.println("Order_Dto price:" + ret.toString());
+        setTotalPrice(ret.toString());
     }
 }

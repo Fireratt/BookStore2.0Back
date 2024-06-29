@@ -3,6 +3,7 @@ package com.example.myapp.daoimpl;
 import org.springframework.stereotype.* ;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class Orderdaoimpl implements Orderdao{
         return accessOrder.getNewOrderId() ; 
     }
 
-    public int saveOrderItem(int order_id , int book_id , int amount , int price) 
+    public int saveOrderItem(int order_id , int book_id , int amount , BigDecimal price) 
     {
         return accessOrder.saveOrderItem(order_id, book_id, amount, price) ; 
     }

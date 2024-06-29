@@ -1,5 +1,7 @@
 package com.example.myapp.dto ;
 
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 @Data
@@ -11,19 +13,19 @@ public class Book_dto
 
 	private String Name ; 
 
-    private double Price ; 
+    private BigDecimal Price ; 
 
 	private String Description ; 
 
 	private int Storage ; 
 
-    private double RealPrice ; 
+    private BigDecimal RealPrice ; 
 // Byte array should encode it in the base64 format in this string
 	private String cover ; 
 
 	private String isbn ; 
     public Book_dto(int Book_Id , String iName, String iAuthor 
-		, String iDescription, double iPrice,double real_price , int iStorage , String cover , String isbn)
+		, String iDescription, BigDecimal iPrice,BigDecimal real_price , int iStorage , String cover , String isbn)
 	{
 		this.bookId = Book_Id ; 
 		this.Name = iName ; 

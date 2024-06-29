@@ -126,6 +126,7 @@ public class OrderController
         {
             end = DEFAULT_END ;  // default value ; 
         }
+        System.out.println("BigDecimal:" + orderService.countOrder(start, end, request).getPriceSum().toString() ); 
         return orderService.countOrder(start, end, request) ; 
     }
 }

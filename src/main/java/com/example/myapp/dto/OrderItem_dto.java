@@ -1,5 +1,7 @@
 package com.example.myapp.dto;
 
+import java.math.BigDecimal;
+
 import com.example.myapp.data.Book;
 
 import jakarta.persistence.Column;
@@ -14,13 +16,13 @@ public class OrderItem_dto {
 
     private String BookName ; 
 
-    private double Price ; 
+    private BigDecimal Price ; 
 
     private int Amount ; 
 
 
 
-    public OrderItem_dto( String bookName , double price , 
+    public OrderItem_dto( String bookName , BigDecimal price , 
         int amount )
     {
         BookName = bookName ; 

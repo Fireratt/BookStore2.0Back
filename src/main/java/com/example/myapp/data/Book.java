@@ -36,7 +36,7 @@ public class Book
 	@Column(name="name") 
 	private String Name ; 
 
-	@Column(name="price") 
+	@Column(name="price" , columnDefinition = "decimal(10,2)") 
     private BigDecimal Price ; 
 
 	@Column(name="description") 
@@ -47,7 +47,7 @@ public class Book
 
 	// @Column(name="real_price") 
 	@Transient
-    private double RealPrice ; 
+    private BigDecimal RealPrice ; 
 
 	@Column(name = "isbn")
 	private String isbn ; 
@@ -62,7 +62,7 @@ public class Book
 	// @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
 	// @JoinColumn(name="book_id") 
 	// private List<Cart> carts ; 
-	public Book(int Book_Id , String iName, String iAuthor , String iDescription, double iPrice,double real_price , int iStorage)
+	public Book(int Book_Id , String iName, String iAuthor , String iDescription, double iPrice,BigDecimal real_price , int iStorage)
 	{
 		this.bookId = Book_Id ; 
 		this.Name = iName ; 

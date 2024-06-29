@@ -3,6 +3,7 @@ package com.example.myapp.dao;
 import org.springframework.stereotype.* ;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public interface Orderdao {
 
     int getNewOrderId() ;
 
-    int saveOrderItem(int order_id , int book_id , int amount , int price) ;  
+    int saveOrderItem(int order_id , int book_id , int amount , BigDecimal price) ;  
 
     Order[] searchOrder(int user_id , String query) ; 
 

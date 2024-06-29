@@ -1,4 +1,5 @@
 package com.example.myapp.data;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import lombok.Data;
@@ -26,8 +27,8 @@ public class OrderItem {
     @Transient
     private String BookName ; 
 
-    @Column(name = "price")
-    private double Price ; 
+    @Column(name = "price" , columnDefinition = "decimal(10,2)")
+    private BigDecimal Price ; 
 
     @Column(name = "amount")
     private int Amount ; 
@@ -40,12 +41,12 @@ public class OrderItem {
     // @JoinColumn(name="order_id")
     // private Order order ; 
 
-    public OrderItem(int book_id , String bookName , double price , 
+    public OrderItem(int book_id , String bookName , BigDecimal price , 
         int amount )
     {
         this.book_id = book_id ; 
         BookName = bookName ; 
-        Price = price ; 
+        Price =price ; 
         Amount = amount ;
         orderitem_id = 0 ; 
     } ; 
@@ -63,7 +64,7 @@ public class OrderItem {
 
         this.book_id =Integer.parseInt(strarr[0] ); 
         BookName = strarr[1] ; 
-        Price = Double.parseDouble(strarr[2]) ; 
+        Price = new BigDecimal(Double.parseDouble(strarr[2])) ; 
         Amount = Integer.parseInt(strarr[3]) ;
         orderitem_id = 0 ; 
     }

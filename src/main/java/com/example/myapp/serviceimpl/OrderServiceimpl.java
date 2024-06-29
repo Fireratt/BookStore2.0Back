@@ -91,7 +91,7 @@ public class OrderServiceimpl implements OrderService
             for(int i = 0 ; i < itemNum ; i++)
             {
                 accessBook.updateStorage(items.get(i).getBook_id() , items.get(i).getAmount()) ; 
-                accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount() ,(int)items.get(i).getPrice()) ;  
+                accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount() ,items.get(i).getPrice()) ;  
                 accessCart.deleteByIds(user_id, items.get(i).getBook_id()) ; 
             }
         
