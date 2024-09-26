@@ -56,12 +56,12 @@ public class OrderServiceimpl implements OrderService
         // return new Order_dto[]{} ;  
 
     }
-    public boolean put(Object entity , HttpServletRequest request) throws StorageNotEnoughException
+    
+    public boolean put(Object entity , int user_id) throws StorageNotEnoughException
     {
         if(entity instanceof Order)
         {
             Order result = (Order)entity ; 
-            int user_id = SessionService.getUserId(request) ;
             result.setUserId(user_id);
             // should first check the storage is enough
             List<OrderItem> items = result.getOrderItems() ; 

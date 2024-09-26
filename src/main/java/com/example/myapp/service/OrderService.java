@@ -18,7 +18,7 @@ import java.util.*;
 public interface OrderService {
     public Order_dto[] getList(HttpServletRequest request) ;
 
-    public boolean put(Object entity , HttpServletRequest request) throws StorageNotEnoughException;
+    public boolean put(Object entity , int user_id) throws StorageNotEnoughException;
 
     public boolean del(Object entity , HttpServletRequest request) ;
 

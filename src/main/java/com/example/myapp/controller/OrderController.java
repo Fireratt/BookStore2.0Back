@@ -12,8 +12,12 @@ import com.example.myapp.dto.*;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.OrderItem;
 import com.example.myapp.utils.SessionUtils;
+import com.example.myapp.utils.StringUtils;
 
+import org.apache.catalina.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+
 import jakarta.servlet.http.* ; 
 @RestController
 public class OrderController 
@@ -24,6 +28,9 @@ public class OrderController
     OrderService orderService ; 
     @Autowired
     BookService accessBook ; 
+    @Autowired
+	private KafkaTemplate<String,String> kafkaTemplate ; 
+
     @GetMapping("/order")
     public Order_dto[] getOrderList(HttpServletRequest request)
     {
@@ -33,37 +40,19 @@ public class OrderController
     @PostMapping("/order")  // the front end should pass a Array of kv like : [book_id , amount]
     public Map<String,String> addOrder(@RequestBody List<Map<String,String>> body,HttpServletRequest request , HttpServletResponse response)
     {
-        ArrayList<OrderItem> orderItems = new ArrayList<>() ; 
-        int size = body.size() ; 
-        for(int i = 0 ; i < size ; i++) // read all the book in the body . 
-        {
-            Map<String,String> singleBook = body.get(i) ; 
-            int book_id =Integer.parseInt(singleBook.get("book_id")) ; 
-            System.out.println("AddOrder::" + book_id);
-            int amount = Integer.parseInt(singleBook.get("amount")) ; 
-            System.out.println(amount);
-            Book_dto bookInfo = accessBook.get(book_id , request) ; 
-            OrderItem newItem = new OrderItem(book_id, bookInfo.getName(), bookInfo.getPrice(), amount) ;
-            orderItems.add(newItem) ; 
-        }
-        Order newOrder = new Order(-1, -1, orderItems, "") ; 
-        boolean result = false; 
         HashMap<String,String> ret = new HashMap<>() ; 
+        int user_id = SessionService.getUserId(request) ;
+        // add a user_id add the head to mark whose order 
         try{
-            result = orderService.put(newOrder, request) ;
-        } catch(StorageNotEnoughException err)
-        {
-            result = false ; 
-            System.out.println(err.book_id + "::" + StorageNotEnoughException.message) ;
-            ret.put("reason" , "库存不足") ; 
-            ret.put("book_id" , err.book_id + "") ; 
+            kafkaTemplate.send("Order" ,  user_id +";" +StringUtils.form(body.toArray())) ; 
         }
-        if(result)
-            ret.put("Success","true" ) ; 
-            else
-            {
-                ret.put("Success","false" ) ; 
-            }
+        catch(Exception e){
+            e.printStackTrace();
+            ret.put("reason" , "下订单失败") ; 
+            ret.put("Success","false" ) ; 
+            return ret ; 
+        }
+        ret.put("Success","true" ) ; 
         return ret ; 
     }
     // the paid info

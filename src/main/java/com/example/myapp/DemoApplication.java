@@ -12,17 +12,22 @@ import java.util.*;
 import com.example.myapp.*;
 import com.example.myapp.data.Book;
 import com.example.myapp.data.Order;
-
-import org.springframework.http.HttpHeaders ; 
 import com.example.myapp.FilterRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+
 import com.example.myapp.controller.*;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.config.TopicBuilder;
+import org.apache.kafka.clients.admin.NewTopic;
+
 // @CrossOrigin
 @RestController
 @SpringBootApplication
 public class DemoApplication {
+
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "bad request")
 	public static class HttpException extends RuntimeException
 	{
@@ -65,7 +70,14 @@ public class DemoApplication {
 	// }
 	// handle pay item information query 
 
-
+	// create topics here
+	@Bean
+    public NewTopic topic() {
+        return TopicBuilder.name("Order")
+                .partitions(10)
+                .replicas(1)
+                .build();
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
