@@ -16,7 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 // import org.springframework.dao.DataAccessException; 
 import org.springframework.dao.IncorrectResultSizeDataAccessException ; 
 
-public interface Accountdao{
+public interface Accountdao {
 
     public List<Map> confirmLogin(String userName , String password) ; 
     

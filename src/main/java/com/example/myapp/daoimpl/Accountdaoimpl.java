@@ -5,6 +5,7 @@ import org.springframework.stereotype.* ;
 import com.example.myapp.dao.Accountdao;
 import com.example.myapp.data.UserAuth;
 
+import java.io.Serializable;
 import java.sql.SQLIntegrityConstraintViolationException;
 // import java.io.Console;
 import java.util.*;

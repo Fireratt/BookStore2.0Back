@@ -1,21 +1,27 @@
 package com.example.myapp.controller ; 
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 import com.example.myapp.dao.Accountdao;
 import com.example.myapp.data.UserAuth;
+import com.example.myapp.service.TimerService;
 import com.example.myapp.utils.SessionUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import jakarta.servlet.http.* ; 
 @RestController
-public class AccountController {
+@Scope(value = "singleton")
+public class AccountController{
     @Autowired
     private Accountdao accessAccount ; 
+	@Autowired 
+	private TimerService timerService ; 
 	@PostMapping("/login")
 	public Map<String,String> confirmLogin(@RequestBody Map<String,String> Account ,  HttpServletRequest request , HttpServletResponse response)
 	{
@@ -39,6 +45,8 @@ public class AccountController {
 				ret.put("State", "Success") ; 
 				ret.put("Administrator" , user.get(0).get("administrator").toString()) ; 
 				SessionUtils.setSession(new UserAuth(user.get(0).get("user_id").toString()), request);
+				// start the timer to record the login time 
+				timerService.login();
 				return ret ; 
 			}
 			else
@@ -78,6 +86,11 @@ public class AccountController {
 			return ret ; 
 		}
 	}
-
-
+	@PostMapping("/logout")
+	public Map<String,String> logout(HttpServletRequest request , HttpServletResponse response){
+		HashMap<String,String> ret = new HashMap<>() ; 
+		ret.put("OnlineTime", "" + timerService.logout())  ; 
+		SessionUtils.clearSession(request);
+ 		return ret ; 
+	}
 }

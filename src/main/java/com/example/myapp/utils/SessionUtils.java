@@ -26,7 +26,9 @@ public class SessionUtils {
         }
         return result.toString() ; 
     }
-
+    public static void clearSession(HttpServletRequest request){
+        request.getSession().invalidate(); 
+    }
     public class UserBanException extends Exception
     {
         static final String message = "This User Have Been Banned , Session Invalid" ; 
