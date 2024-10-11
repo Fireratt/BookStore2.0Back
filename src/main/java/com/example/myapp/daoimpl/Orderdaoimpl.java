@@ -1,6 +1,9 @@
 package com.example.myapp.daoimpl; 
 
 import org.springframework.stereotype.* ;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -27,12 +30,11 @@ public class Orderdaoimpl implements Orderdao{
     {
         return accessOrder.getOrderList(user_id) ; 
     }
-    
+    @Transactional(propagation = Propagation.REQUIRED)
     public void save(Order order) 
     {
         accessOrder.save(order);
     }
-
     public String[] getOrderItem(int order_id)
     {
         return accessOrder.getOrderItem(order_id) ; 
@@ -42,9 +44,10 @@ public class Orderdaoimpl implements Orderdao{
     {
         return accessOrder.getNewOrderId() ; 
     }
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public int saveOrderItem(int order_id , int book_id , int amount , BigDecimal price) 
     {
+        int testCrash = 10/0 ; 
         return accessOrder.saveOrderItem(order_id, book_id, amount, price) ; 
     }
 

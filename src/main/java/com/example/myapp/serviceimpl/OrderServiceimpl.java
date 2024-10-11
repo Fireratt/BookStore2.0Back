@@ -11,6 +11,9 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.myapp.data.Order;
 import jakarta.servlet.http.* ; 
 import com.example.myapp.data.OrderItem;
@@ -56,7 +59,7 @@ public class OrderServiceimpl implements OrderService
         // return new Order_dto[]{} ;  
 
     }
-    
+    @Transactional
     public boolean put(Object entity , int user_id) throws StorageNotEnoughException
     {
         if(entity instanceof Order)
@@ -82,7 +85,11 @@ public class OrderServiceimpl implements OrderService
             mid.setDate(result.getDate());
             mid.setUserId(user_id);
             System.out.println(mid.getUserId());
-            accessOrder.save(mid) ;
+            try
+            {accessOrder.save(mid) ;}
+            catch(Exception e){
+                //IGNORE 
+            }
             int id = mid.getOrderId() ; 
             System.out.println(id) ; 
             int orderId = id ; 
@@ -94,7 +101,6 @@ public class OrderServiceimpl implements OrderService
                 accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount() ,items.get(i).getPrice()) ;  
                 accessCart.deleteByIds(user_id, items.get(i).getBook_id()) ; 
             }
-        
             return true ; 
         }
         return false ; 

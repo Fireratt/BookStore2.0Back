@@ -42,9 +42,18 @@ public class OrderController
     {
         HashMap<String,String> ret = new HashMap<>() ; 
         int user_id = SessionService.getUserId(request) ;
+        int len = body.size() ; 
+        // adjust the body to fit the [book_id , amount]
+        ArrayList<Map<String,String>> message = new ArrayList<Map<String,String>>(body.size()) ; 
+        for(int i = 0 ; i < len ; i++) {
+            LinkedHashMap<String, String> append = new LinkedHashMap<String,String>(2) ; 
+            append.put("book_id",body.get(i).get("book_id")) ; 
+            append.put("amount", body.get(i).get("amount")) ; 
+            message.add(append) ; 
+        }
         // add a user_id add the head to mark whose order 
         try{
-            kafkaTemplate.send("Order" ,  user_id +";" +StringUtils.form(body.toArray())) ; 
+            kafkaTemplate.send("Order" ,  user_id +";" +StringUtils.form(message.toArray())) ; 
         }
         catch(Exception e){
             e.printStackTrace();
