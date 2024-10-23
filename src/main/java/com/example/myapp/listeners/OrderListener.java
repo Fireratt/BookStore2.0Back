@@ -15,8 +15,11 @@ import com.example.myapp.dto.Book_dto;
 import com.example.myapp.service.OrderService;
 import com.example.myapp.service.OrderService.StorageNotEnoughException;
 import com.example.myapp.utils.StringUtils;
+import com.example.myapp.websocket.WbServer;
 @Component
 public class OrderListener {
+    @Autowired
+    WbServer wbServer ; 
     @Autowired
     Bookdao accessBook ; 
     @Autowired
@@ -50,15 +53,29 @@ public class OrderListener {
         {
             result = false ; 
             System.out.println(err.book_id + "::" + StorageNotEnoughException.message) ;
-            kafkaTemplate.send("finished",  "key", "书籍序号:" + err.book_id + "库存不足");
+            Book bookInfo = accessBook.findByBookId(err.book_id) ; 
+            
+            kafkaTemplate.send("finished",  "key", user_id + ",2;" + bookInfo.getName());//库存不足
+            return ; 
         }
         if(result)
-            kafkaTemplate.send("finished",  "key", "订单成功");
+            kafkaTemplate.send("finished",  "key", user_id + ",1");//成功
         else
             {
                 System.out.println("订单失败了");
-                kafkaTemplate.send("finished",  "key", "订单失败");
+                kafkaTemplate.send("finished",  "key", user_id +",0");//失败
             }
+    }
+
+    @KafkaListener(topics={"finished"} , groupId="BookStore")
+    public void finishedListener(ConsumerRecord<String, String> finish)
+    {
+        String message = finish.value() ; 
+        System.out.println("Finished Receive Message" + message);
+        String[] messages = message.split(",") ; 
+        String user_id = messages[0] ; 
+        String toSend = messages[1] ; 
+        wbServer.sendMessageToUser(user_id , toSend);
     }
 }
 

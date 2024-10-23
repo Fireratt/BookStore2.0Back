@@ -6,6 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.myapp.data.*;
 import com.example.myapp.repository.AccessUser;
 public class SessionUtils {
+    public static String readSession(String attribute , HttpSession session){
+        Object result = null; 
+        if(session != null)
+        {
+            result = session.getAttribute(attribute) ; 
+        }
+        if(result == null)
+        {
+            return "" ; 
+        }
+        return result.toString() ; 
+    }
     public static void setSession(UserAuth userAuth , HttpServletRequest request) // pass the request , write the session
     {
         HttpSession session = request.getSession() ; 

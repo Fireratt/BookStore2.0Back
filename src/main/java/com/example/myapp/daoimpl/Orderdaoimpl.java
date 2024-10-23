@@ -47,7 +47,6 @@ public class Orderdaoimpl implements Orderdao{
     @Transactional(propagation = Propagation.REQUIRED)
     public int saveOrderItem(int order_id , int book_id , int amount , BigDecimal price) 
     {
-        int testCrash = 10/0 ; 
         return accessOrder.saveOrderItem(order_id, book_id, amount, price) ; 
     }
 
