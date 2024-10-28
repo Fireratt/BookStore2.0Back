@@ -11,8 +11,6 @@ import com.example.myapp.utils.ByteUtils;
 
 import ch.qos.logback.core.encoder.ByteArrayUtil;
 import lombok.Data;
-import jakarta.persistence.NamedStoredProcedureQueries;
-import jakarta.persistence.NamedStoredProcedureQuery;
 @Data
 @Entity 
 @Table(name = "book" ,schema = "bookdb")
@@ -77,7 +75,16 @@ public class Book
 	{
 
 	}
-
+	public Book(String name ,double price ,String author, String description , int storage , String isbn , String cover){
+		this.Name = name ; 
+		this.Price = new BigDecimal(price); 
+		this.Author = author ;
+		this.Description = description ; 
+		this.Storage = storage ; 
+		this.isbn = isbn ; 
+		this.cover = cover; 
+		this.valid = 1 ; 
+	}
 	public Book_Basic_dto toBasicDto()
 	{
 		return new Book_Basic_dto(bookId,  Name , Price , cover) ; 
