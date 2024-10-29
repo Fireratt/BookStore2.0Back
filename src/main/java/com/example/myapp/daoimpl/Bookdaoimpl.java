@@ -61,7 +61,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public int modifyBook(int book_id , String name , String author , int Storage ,  String isbn , double price ) 
     {
-                // need to modify the cache in the redis
+        // need to modify the cache in the redis
         String bookString = (String)redisTemplate.get("book" + book_id) ; 
         if(bookString!=null){
             System.out.println("Book " +book_id + "is in the redis and need to update");
@@ -71,6 +71,7 @@ public class Bookdaoimpl implements Bookdao{
             book.setStorage(Storage);
             book.setIsbn(isbn);
             book.setPrice(new BigDecimal(price));
+            redisTemplate.setDirty("book"+book_id);
             redisTemplate.set("book"+book_id , JSON.toJSONString(book)) ; 
             return 1 ; 
         }
@@ -89,6 +90,7 @@ public class Bookdaoimpl implements Bookdao{
             System.out.println("Book " +book_id + "is in the redis and need to update");
             Book book = (Book)JSON.parseObject(bookString , Book.class) ; 
             book.setCover(cover);
+            redisTemplate.setDirty("book"+book_id);
             redisTemplate.set("book"+book_id , JSON.toJSONString(book)) ; 
             return 1; 
         }
@@ -101,6 +103,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public int addBook(String name ,double price ,String author, String description , int storage , String isbn , String cover) 
     {
+        // use writethrough strategy
         Book book = accessBook.save(new Book(name, price, author, description, storage, isbn, cover)) ; 
         // insert it in the redis
         System.out.println("Book " +book.getBookId()+ "insert in redis when addbook");
@@ -110,7 +113,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public int deleteBook(int book_id)
     {
-        // need to modify the cache in the redis
+        // need to modify the cache in the redis  use writethrough strategy
         boolean result = redisTemplate.delete("book"+book_id) ;
         if(result){
             System.out.println("Book " +book_id + "in the redis and be deleted");
@@ -122,20 +125,32 @@ public class Bookdaoimpl implements Bookdao{
 
     public Integer checkStorage(int book_id , int number)
     {
-        // not cache to avoid inconsistency caused storage error .
+        // read from cache
+        String bookString = (String)redisTemplate.get("book" + book_id) ; 
+        if(bookString!=null){
+            System.out.println("Book " +book_id + "is in the redis and need to update");
+            Book book = (Book)JSON.parseObject(bookString , Book.class) ; 
+            return book.getStorage() > number? 1 : null ; 
+        }
+            // not find
+        System.out.println("Book " +book_id + "not in the redis , no need to update");
         return accessBook.checkStorage(book_id , number) ; 
     }
 
     public int updateStorage(int book_id , int number)
     {
-                // need to modify the cache in the redis
+        // need to modify the cache in the redis
+        // wait until automatically save to mysql
         String bookString = (String)redisTemplate.get("book" + book_id) ; 
         if(bookString!=null){
             System.out.println("Book " +book_id + "is in the redis and need to update");
             Book book = (Book)JSON.parseObject(bookString , Book.class) ; 
-            book.setStorage(number);
+            book.setStorage(book.getStorage() - number);
+            // set the dirty bit to 1 
+            redisTemplate.setDirty("book"+book_id);
             redisTemplate.set("book"+book_id , JSON.toJSONString(book)) ; 
-            }
+            return 1 ; 
+        }
             // not find
         System.out.println("Book " +book_id + "not in the redis , no need to update");
         return accessBook.updateStorage(book_id, number) ; 
