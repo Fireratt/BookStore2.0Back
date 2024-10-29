@@ -148,4 +148,7 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Transactional
     @Query(value="call bookdb.get_book_rank(?1, ?2)" ,nativeQuery=true)
     List<Map> getBookRank(@Param("start") String start , @Param("end") String end) ; 
+
+    @Query(value="select b from Book b where b.valid = 1")
+    List<Book> findall() ; 
 }   

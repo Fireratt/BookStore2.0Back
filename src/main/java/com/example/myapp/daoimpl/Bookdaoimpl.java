@@ -14,6 +14,7 @@ import com.example.myapp.dao.Bookdao;
 import com.example.myapp.data.Book;
 import com.example.myapp.dto.BookRank;
 import com.example.myapp.repository.AccessBook;
+import com.example.myapp.utils.PageUtils;
 import com.example.myapp.utils.RedisWrapper;
 
 import org.springframework.data.redis.core.RedisTemplate ; 
@@ -27,10 +28,33 @@ public class Bookdaoimpl implements Bookdao{
 
     @Autowired
     private RedisWrapper redisTemplate ; 
-
+    final String ZSetKey = "BookCache" ; 
     public Page<Book> findByPage(Pageable pageStatus) 
     {
-        return accessBook.findByPage(pageStatus) ; 
+        // if not create the zset , means no cached all book in redis . 
+        if(redisTemplate.size(ZSetKey) == 0){
+            // cache all the book 
+            List<Book> booklist = accessBook.findall() ; 
+            Iterator<Book> iter = booklist.iterator() ; 
+            while(iter.hasNext()){
+                Book book = iter.next() ; 
+                if(redisTemplate.get("book"+book.getBookId()) == null){
+                    redisTemplate.set("book"+book.getBookId(), JSON.toJSONString(book));
+                }
+                redisTemplate.addZSet(ZSetKey, "" + book.getBookId(), book.getBookId());
+            }
+        }
+        String[] list = redisTemplate.range(ZSetKey, pageStatus.getPageNumber() * pageStatus.getPageSize()
+        , (pageStatus.getPageNumber() + 1) * pageStatus.getPageSize() -1).toArray(new String[0]) ; 
+        Book[] booklist = new Book[list.length] ; 
+        int cnt = 0 ; 
+        for (String string : list) {
+            String bookJSON = (String)redisTemplate.get("book" + string) ; 
+            booklist[cnt] = (Book)JSON.parseObject(bookJSON , Book.class) ; 
+            cnt ++ ; 
+        }
+        System.out.println("<BookDaoImpl>Find Total Element Number:" + redisTemplate.size(ZSetKey));
+        return PageUtils.toPage(booklist, pageStatus, redisTemplate.size(ZSetKey)) ; 
     }
 
     public Book findByBookId(int Book_Id)

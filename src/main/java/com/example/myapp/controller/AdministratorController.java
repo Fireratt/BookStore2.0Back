@@ -8,6 +8,7 @@ import com.example.myapp.data.User;
 import com.example.myapp.data.UserAuth;
 import com.example.myapp.service.AdministratorService;
 import com.example.myapp.utils.ByteUtils;
+import com.example.myapp.utils.RedisWrapper;
 import com.example.myapp.utils.SessionUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ import com.example.myapp.dto.*;
 public class AdministratorController {
     @Autowired
     AdministratorService administratorService ; 
-
+    @Autowired
+    RedisWrapper redisWrapper ; 
     static final int PAGE_SIZE = 4 ; 
     static final String DEFAULT_START = "1970-01-01" ; 
     static final String DEFAULT_END = "2035-01-01" ; 
@@ -32,6 +34,8 @@ public class AdministratorController {
     @GetMapping("/book")
     Page<Book_dto> searchBook(@RequestParam Map<String , String> params , HttpServletRequest request , HttpServletResponse response)
     {
+        // invoke the RedisWrapper to Save the Data to the db 
+        redisWrapper.save(); 
         String name = params.get("bookname") ; 
         int page = Integer.parseInt( params.get("page")) ; 
         Pageable pageStatus = PageRequest.of(page, PAGE_SIZE) ; 

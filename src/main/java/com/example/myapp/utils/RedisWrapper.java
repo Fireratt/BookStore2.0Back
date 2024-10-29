@@ -7,6 +7,9 @@ import com.example.myapp.data.Book;
 import com.example.myapp.repository.AccessBook;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
+import io.micrometer.common.lang.Nullable;
+
+import java.util.Set; 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,9 +18,12 @@ import java.util.concurrent.ScheduledExecutorService.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.* ; 
+import org.springframework.data.domain.Range;
+import org.springframework.data.redis.core.ScanOptions ; 
 import org.springframework.data.redis.core.RedisTemplate ;
 import org.springframework.data.redis.core.ScanOptions.ScanOptionsBuilder ; 
+import org.springframework.data.redis.core.* ; 
+
 import com.alibaba.fastjson2.JSON ; 
 @Component
 public class RedisWrapper {
@@ -129,5 +135,44 @@ public class RedisWrapper {
     protected void finalize() throws Throwable{
         // save all the data in the redis to mysql
         save() ; 
+    }
+
+    public void addZSet(String key , String value , long score){
+        try{
+            
+        redisTemplate.opsForZSet().add(key , value , score) ; 
+    }catch(Exception e){
+        System.err.println("Cant Connect to Redis , Use Storage Instead of Cache to Run");
+        return ; 
+    }
+    }
+
+    public Set<String> range(String key , long start , long end){
+    try{
+        // help to handle the end > the size 's problem
+        return redisTemplate.opsForZSet().range(key , start , end>size(key)-1?size(key)-1:end) ; 
+    }catch(Exception e){
+        System.err.println("Cant Connect to Redis , Use Storage Instead of Cache to Run");
+        return null; 
+    }
+    }
+
+    public Set<String> rangeByLex(String key, Range<String> range){
+        try{
+            
+        return redisTemplate.opsForZSet().rangeByLex(key , range) ; 
+    }catch(Exception e){
+        System.err.println("Cant Connect to Redis , Use Storage Instead of Cache to Run");
+        return null; 
+    }
+    }
+    public long size(String key) {
+        try{
+            
+        return redisTemplate.opsForZSet().size(key) ; 
+    }catch(Exception e){
+        System.err.println("Cant Connect to Redis , Use Storage Instead of Cache to Run");
+        return -1; 
+    }
     }
 }
