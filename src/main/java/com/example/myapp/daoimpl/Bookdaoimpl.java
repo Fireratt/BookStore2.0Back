@@ -8,6 +8,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Range;
 import org.springframework.jdbc.core.JdbcTemplate ; 
 import com.example.myapp.BookList;
 import com.example.myapp.dao.Bookdao;
@@ -16,7 +17,9 @@ import com.example.myapp.dto.BookRank;
 import com.example.myapp.repository.AccessBook;
 import com.example.myapp.utils.PageUtils;
 import com.example.myapp.utils.RedisWrapper;
+import com.example.myapp.utils.RedisWrapper.ZScanResult;
 
+import org.springframework.data.redis.connection.Limit ; 
 import org.springframework.data.redis.core.RedisTemplate ; 
 import com.alibaba.fastjson2.JSON ; 
 @Repository
@@ -29,9 +32,9 @@ public class Bookdaoimpl implements Bookdao{
     @Autowired
     private RedisWrapper redisTemplate ; 
     final String ZSetKey = "BookCache" ; 
-    public Page<Book> findByPage(Pageable pageStatus) 
-    {
-        // if not create the zset , means no cached all book in redis . 
+    final String ZSetNameKey = "BookName" ; 
+    // this function check if the book zset have been set . If not , set it ; or do nothing . 
+    private void initializeBookZSet(){
         if(redisTemplate.size(ZSetKey) == 0){
             // cache all the book 
             List<Book> booklist = accessBook.findall() ; 
@@ -42,8 +45,13 @@ public class Bookdaoimpl implements Bookdao{
                     redisTemplate.set("book"+book.getBookId(), JSON.toJSONString(book));
                 }
                 redisTemplate.addZSet(ZSetKey, "" + book.getBookId(), book.getBookId());
+                redisTemplate.addZSet(ZSetNameKey, book.getName(), book.getBookId());
             }
         }
+    }
+    public Page<Book> findByPage(Pageable pageStatus) 
+    {
+        initializeBookZSet();
         String[] list = redisTemplate.range(ZSetKey, pageStatus.getPageNumber() * pageStatus.getPageSize()
         , (pageStatus.getPageNumber() + 1) * pageStatus.getPageSize() -1).toArray(new String[0]) ; 
         Book[] booklist = new Book[list.length] ; 
@@ -80,7 +88,27 @@ public class Bookdaoimpl implements Bookdao{
 
     public Page<Book> SearchByName(String name, Pageable pageStatus)
     {
-        return accessBook.SearchByName(name , pageStatus) ; 
+        initializeBookZSet();
+        // create a regex for the name to be recognized 
+        String regex = "*" + name + "*" ; 
+        Range<String> range = Range.closed(regex, regex) ; 
+        ZScanResult result = redisTemplate.ZScanWithScore(ZSetNameKey, regex
+        , pageStatus.getPageSize(), pageStatus.getPageNumber() * pageStatus.getPageSize()) ; 
+        System.out.println("<BookDaoImpl SearchByName> Find Total Element Number:" +result.getMatchedElements());
+        // String[] list = redisTemplate.rangeByLex(ZSetNameKey,range , pageStatus.getPageNumber() * pageStatus.getPageSize()
+        // , pageStatus.getPageSize()).toArray(new String[0]) ; 
+        Double[] list = result.getList().toArray(new Double[0]) ; 
+        Book[] booklist = new Book[list.length] ; 
+        int cnt = 0 ; 
+        for (Double bookid : list) {
+            System.out.println("<BookDaoImpl SearchByName> receive Integer:" + bookid.intValue());
+            String bookJSON = (String)redisTemplate.get("book" + bookid.intValue()) ; 
+            booklist[cnt] = (Book)JSON.parseObject(bookJSON , Book.class) ; 
+            cnt ++ ; 
+        }
+
+        return PageUtils.toPage(booklist, pageStatus, result.getMatchedElements()) ; 
+//        return accessBook.SearchByName(name , pageStatus) ; 
     }
 
     public int modifyBook(int book_id , String name , String author , int Storage ,  String isbn , double price ) 

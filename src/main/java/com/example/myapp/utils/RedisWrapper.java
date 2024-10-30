@@ -11,6 +11,7 @@ import io.micrometer.common.lang.Nullable;
 
 import java.util.Set; 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -19,10 +20,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Range;
-import org.springframework.data.redis.core.ScanOptions ; 
 import org.springframework.data.redis.core.RedisTemplate ;
 import org.springframework.data.redis.core.ScanOptions.ScanOptionsBuilder ; 
 import org.springframework.data.redis.core.* ; 
+import org.springframework.data.redis.connection.Limit ; 
 
 import com.alibaba.fastjson2.JSON ; 
 @Component
@@ -157,10 +158,13 @@ public class RedisWrapper {
     }
     }
 
-    public Set<String> rangeByLex(String key, Range<String> range){
+    public Set<String> rangeByLex(String key, Range<String> range , int offset , int count){
         try{
-            
-        return redisTemplate.opsForZSet().rangeByLex(key , range) ; 
+
+        Limit limit = Limit.unlimited() ; 
+        limit = limit.count(count) ; 
+        limit = limit.offset(offset) ; 
+        return redisTemplate.opsForZSet().rangeByLex(key , range , limit) ; 
     }catch(Exception e){
         System.err.println("Cant Connect to Redis , Use Storage Instead of Cache to Run");
         return null; 
@@ -174,5 +178,52 @@ public class RedisWrapper {
         System.err.println("Cant Connect to Redis , Use Storage Instead of Cache to Run");
         return -1; 
     }
+    }
+
+    public List<String> ZScan(String key , String mode , int count , int offset){
+        ScanOptions options= ScanOptions.scanOptions().match(mode).count(count).build() ;
+        Cursor<ZSetOperations.TypedTuple<String>> cursor =  redisTemplate.opsForZSet().scan(key , options) ; 
+        int cnt = 0  ; 
+        ArrayList<String> list = new ArrayList<>(count) ; 
+        while(cursor.hasNext()){
+            if(cnt >= offset){
+                list.add(cursor.next().getValue()) ; 
+            }
+            cnt ++ ; 
+        }
+        return list ; 
+    } 
+
+    public ZScanResult ZScanWithScore(String key , String mode , int count , int offset){
+        ScanOptions options= ScanOptions.scanOptions().match(mode).count(count).build() ;
+        Cursor<ZSetOperations.TypedTuple<String>> cursor =  redisTemplate.opsForZSet().scan(key , options) ; 
+        int cnt = 0  ; 
+        ArrayList<Double> list = new ArrayList<>(count) ; 
+        while(cursor.hasNext()){
+            ZSetOperations.TypedTuple<String> result = cursor.next() ; 
+            if(cnt >= offset && cnt <= offset + count){
+                list.add(result.getScore()); 
+            }
+            cnt ++ ; 
+        }
+        
+        return new ZScanResult(list,cnt) ; 
+    } 
+    public class ZScanResult{
+        private List<Double> list ; 
+        private int matchedElements  ; 
+        ZScanResult(){
+
+        }
+        ZScanResult(List<Double> list , int matchedElements){
+            this.list = list ; 
+            this.matchedElements = matchedElements ; 
+        }
+        public List<Double> getList() {
+            return list;
+        }
+        public int getMatchedElements() {
+            return matchedElements;
+        }
     }
 }
