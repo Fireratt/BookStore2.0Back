@@ -34,6 +34,10 @@ public class Bookdaoimpl implements Bookdao{
     final String ZSetKey = "BookCache" ; 
     final String ZSetNameKey = "BookName" ; 
     // this function check if the book zset have been set . If not , set it ; or do nothing . 
+    public Bookdaoimpl(){
+        // we will cache all the books in the redis first to improve the efficiency
+        initializeBookZSet();
+    }
     private void initializeBookZSet(){
         if(redisTemplate.size(ZSetKey) == 0){
             // cache all the book 
