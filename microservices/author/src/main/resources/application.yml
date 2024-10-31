@@ -1,0 +1,28 @@
+server:
+  port: 7070
+  error:
+    include-message: always
+spring:
+  application:
+    name: author-service
+  data :
+    redis: 
+      database : 0
+      host : localhost 
+      port : 6379
+      timeout : 300
+      password : 
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookdb
+    username : root
+    password : 123456
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8040/eureka
+    eureka-service-url-poll-interval-seconds: 10
