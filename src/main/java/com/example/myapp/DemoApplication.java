@@ -1,7 +1,7 @@
 package com.example.myapp;
 
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.* ; 
 import org.springframework.boot.autoconfigure.SpringBootApplication ; 
 import com.fasterxml.jackson.annotation.JsonIgnore ; 
@@ -22,7 +22,7 @@ import com.example.myapp.controller.*;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.config.TopicBuilder;
 import org.apache.kafka.clients.admin.NewTopic;
-
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 // @CrossOrigin
 @RestController
 @SpringBootApplication
@@ -78,7 +78,6 @@ public class DemoApplication {
                 .replicas(1)
                 .build();
     }
-
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	} 

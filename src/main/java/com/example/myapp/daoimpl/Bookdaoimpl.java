@@ -36,7 +36,6 @@ public class Bookdaoimpl implements Bookdao{
     // this function check if the book zset have been set . If not , set it ; or do nothing . 
     public Bookdaoimpl(){
         // we will cache all the books in the redis first to improve the efficiency
-        initializeBookZSet();
     }
     private void initializeBookZSet(){
         if(redisTemplate.size(ZSetKey) == 0){
@@ -71,6 +70,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public Book findByBookId(int Book_Id)
     {
+        initializeBookZSet();
         String bookString = (String)redisTemplate.get("book" + Book_Id) ; 
         if(bookString!=null){
             System.out.println("Book " +Book_Id + "is in the redis");
@@ -117,6 +117,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public int modifyBook(int book_id , String name , String author , int Storage ,  String isbn , double price ) 
     {
+        initializeBookZSet();
         // need to modify the cache in the redis
         String bookString = (String)redisTemplate.get("book" + book_id) ; 
         if(bookString!=null){
@@ -140,6 +141,7 @@ public class Bookdaoimpl implements Bookdao{
     
     public int modifyCover(int book_id , String cover)
     {
+        initializeBookZSet();
         // need to modify the cache in the redis
         String bookString = (String)redisTemplate.get("book" + book_id) ; 
         if(bookString!=null){
@@ -159,6 +161,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public int addBook(String name ,double price ,String author, String description , int storage , String isbn , String cover) 
     {
+        initializeBookZSet();
         // use writethrough strategy
         Book book = accessBook.save(new Book(name, price, author, description, storage, isbn, cover)) ; 
         // insert it in the redis
@@ -169,6 +172,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public int deleteBook(int book_id)
     {
+        initializeBookZSet();
         // need to modify the cache in the redis  use writethrough strategy
         boolean result = redisTemplate.delete("book"+book_id) ;
         if(result){
@@ -181,6 +185,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public Integer checkStorage(int book_id , int number)
     {
+        initializeBookZSet();
         // read from cache
         String bookString = (String)redisTemplate.get("book" + book_id) ; 
         if(bookString!=null){
@@ -195,6 +200,7 @@ public class Bookdaoimpl implements Bookdao{
 
     public int updateStorage(int book_id , int number)
     {
+        initializeBookZSet();
         // need to modify the cache in the redis
         // wait until automatically save to mysql
         String bookString = (String)redisTemplate.get("book" + book_id) ; 

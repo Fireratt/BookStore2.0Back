@@ -21,6 +21,14 @@ public class DemoApplication {
 				.filters(f->f.rewritePath("/author" , ""))
 				.uri("lb://Author-Service")
 				)
+				.route(r -> r.path("/price/**")
+				.filters(f->f.rewritePath("/price" , ""))
+				.uri("lb://Price-Function")
+				)
+				.route(r -> r.path("/main/**")
+				.filters(f->f.rewritePath("/main" , ""))
+				.uri("lb://Main-Process")
+				)
 				.build();
 	}
 }

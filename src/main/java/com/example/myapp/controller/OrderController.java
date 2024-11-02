@@ -11,8 +11,10 @@ import com.example.myapp.service.OrderService.StorageNotEnoughException;
 import com.example.myapp.dto.*;
 import com.example.myapp.data.Order;
 import com.example.myapp.data.OrderItem;
+import com.example.myapp.utils.FuncUtils;
 import com.example.myapp.utils.SessionUtils;
 import com.example.myapp.utils.StringUtils;
+import com.netflix.discovery.converters.Auto;
 
 import org.apache.catalina.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +32,20 @@ public class OrderController
     BookService accessBook ; 
     @Autowired
 	private KafkaTemplate<String,String> kafkaTemplate ; 
-
+    @Autowired
+    private FuncUtils funcUtils ; 
+    // i do nothing for it . Just secure that before use static function , it has been initialized;
     @GetMapping("/order")
     public Order_dto[] getOrderList(HttpServletRequest request)
     {
+        funcUtils.FuncUtilsInitializeStatic();
         return orderService.getList(request) ; 
     }
     
     @PostMapping("/order")  // the front end should pass a Array of kv like : [book_id , amount]
     public Map<String,String> addOrder(@RequestBody List<Map<String,String>> body,HttpServletRequest request , HttpServletResponse response)
     {
+        funcUtils.FuncUtilsInitializeStatic();
         HashMap<String,String> ret = new HashMap<>() ; 
         int user_id = SessionService.getUserId(request) ;
         int len = body.size() ; 
@@ -68,6 +74,7 @@ public class OrderController
     @PostMapping("/pay")
 	public Map<String,String>[] queryController(@RequestBody List<Map<String,String>> requestBody , HttpServletRequest request)
 	{
+        funcUtils.FuncUtilsInitializeStatic();
         int len = requestBody.size() ; 
         Map<String,String>[] items = new Map[len] ; 
         for(int i = 0 ; i < len ; i++)
@@ -90,6 +97,7 @@ public class OrderController
     @GetMapping("/order/search")
     public Order_dto[] searchOrder(@RequestParam Map<String,String> param,  HttpServletRequest request)
     {
+        funcUtils.FuncUtilsInitializeStatic();
         String query = param.get("query") ; 
         return orderService.searchOrder(query, request) ; 
     }
@@ -97,6 +105,7 @@ public class OrderController
     @GetMapping("/order/select")
     public Order_dto[] selectOrder(@RequestParam Map<String,String> param,  HttpServletRequest request)
     {
+        funcUtils.FuncUtilsInitializeStatic();
         String start = param.get("start") ; 
         if(start == "")
         {
@@ -114,6 +123,7 @@ public class OrderController
     @GetMapping("/order/statistic")
     public OrderStatistic_dto countOrder(@RequestParam Map<String,String> param ,  HttpServletRequest request)
     {
+        funcUtils.FuncUtilsInitializeStatic();
         String start = param.get("start") ; 
         if(start == "")
         {

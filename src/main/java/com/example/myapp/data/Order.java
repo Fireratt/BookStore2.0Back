@@ -3,10 +3,15 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.example.myapp.dto.OrderItem_dto;
 import com.example.myapp.dto.Order_dto;
+import com.example.myapp.settings.OrderSettings;
+import com.example.myapp.utils.FuncUtils;
 
 import lombok.Data;
+import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +42,7 @@ public class Order {
 
     @Transient
     private BigDecimal totalPrice ;        // will calculated when initialized 
- 
+        
     public Order(int order_id , int user_id ,List<OrderItem> orderItems , String iDate)
     {
         // pass empty Date , initialize the date ; 
@@ -61,6 +66,13 @@ public class Order {
         for(int i = 0 ; i < size ; i++)
         {
             OrderItem item = orderItems.get(i) ; 
+            // use outside Function to Calculate the Price
+            Flux<String> result = FuncUtils.callFunctionStatic(OrderSettings.CalculatorFuncUri, OrderSettings.FunctionName, item.getAmount() + "," + item.getPrice().intValue()) ; 
+            String currentPrice = result.blockFirst() ; 
+            // delete the []
+            currentPrice = currentPrice.substring(1 , currentPrice.length() -2) ; 
+            System.out.println("<Order> Compute Price :" + currentPrice);
+            totalPrice.add(new BigDecimal(currentPrice)) ; 
             totalPrice.add(item.getPrice().multiply(new BigDecimal(item.getAmount()))) ; 
         }
     }

@@ -1,0 +1,17 @@
+server:
+  port: 7071
+  error:
+    include-message: always
+spring:
+  application:
+    name: price-function
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: localhost
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8040/eureka
+    eureka-service-url-poll-interval-seconds: 10
