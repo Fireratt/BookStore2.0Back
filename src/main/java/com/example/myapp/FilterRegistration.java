@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 @Configuration
 public class FilterRegistration {
     // register the filter in the CorsFilter
-    @Bean
+    // @Bean
     public FilterRegistrationBean registerFilter(){
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.addUrlPatterns("/*");

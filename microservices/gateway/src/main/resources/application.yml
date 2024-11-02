@@ -6,14 +6,21 @@ spring:
   cloud:
     gateway:
       globalcors:
+      # add to solve cors problem
+        add-to-simple-url-handler-mapping: true
         cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOriginPatterns: 
+              - "**"
+            allowCredentials: true
             allowedMethods:
               - GET
               - POST
               - DELETE
               - PUT
+              - OPTIONS
+            allowedHeaders:
+              - "*"
   application:
     name: gateway
 eureka:

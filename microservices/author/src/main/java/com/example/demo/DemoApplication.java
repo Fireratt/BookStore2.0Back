@@ -44,7 +44,6 @@ public class DemoApplication {
 		try{
 			Map<String , Object> result = jdbcTemplate.queryForMap("Select b.author from book b where b.name = ?" , bookName) ; 
 			return (String)result.get("author") ; 
-	
 		}
 		catch(Exception e){
 			e.printStackTrace();
