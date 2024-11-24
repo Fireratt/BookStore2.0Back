@@ -36,7 +36,7 @@ spring:
       timeout : 300
       password : 
     mongodb:
-      uri: mongodb://localhost:27017
+      uri: mongodb://localhost:27017/bookcover
   neo4j :
     uri : bolt://localhost:7687
     authentication:

@@ -1,5 +1,6 @@
 -- 获取当前目录  
 local current_dir = io.popen("pwd"):read("*l")  
+os.execute("call start /min \"n\" startZooKeeper.sh")
 os.execute("net start mysql84")
 -- 遍历当前目录下的所有目录  
 local dirs = io.popen("ls -d */"):lines()  
@@ -17,4 +18,6 @@ local output = io.popen("cd .." .. " && call start /min \"n\" mvn spring-boot:ru
 processes[#processes + 1] = output 
 
 local index = 1 
--- 等待所有进程完成,并输出结果  
+print("Sleep to Wait ZooKeeper")
+os.execute("sleep 15")
+os.execute("call start /min \"n\" startKafka.sh")

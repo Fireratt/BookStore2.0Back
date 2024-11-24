@@ -139,15 +139,15 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Query(value = "update Book b set b.Name=?2,b.Author=?3,b.Storage=?4,b.isbn=?5,b.Price=?6 where b.bookId=?1")
     int modifyBook(int book_id , String name , String author , int Storage, String isbn , double price) ;
     
-    @Modifying
-    @Transactional
-    @Query(value = "update Book b set b.cover=?2 where b.bookId=?1") 
-    int modifyCover(int book_id , String cover) ; 
+    // @Modifying
+    // @Transactional
+    // @Query(value = "update Book b set b.cover=?2 where b.bookId=?1") 
+    // int modifyCover(int book_id , String cover) ; 
 
     @Modifying
-    @Query(value = "insert into Book(Name,Price ,Author, Description ,Storage , isbn , cover) values(?1,?2,?3,?4,?5,?6,?7)")
+    @Query(value = "insert into Book(Name,Price ,Author, Description ,Storage , isbn) values(?1,?2,?3,?4,?5,?6)")
     @Transactional
-    int addBook(String name ,double price ,String author, String description , int storage , String isbn , String cover) ; 
+    int addBook(String name ,double price ,String author, String description , int storage , String isbn) ; 
 
     @Modifying
     @Transactional

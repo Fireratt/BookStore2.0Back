@@ -50,9 +50,10 @@ public class Book
 	@Column(name = "isbn")
 	private String isbn ; 
 
-	@Basic(fetch=FetchType.LAZY)
-	@Lob
-	@Column(name="cover")
+	// @Basic(fetch=FetchType.LAZY)
+	// @Lob
+	// @Column(name="cover")
+	@Transient
 	private String cover ;
 
 	@Column(name ="valid")
