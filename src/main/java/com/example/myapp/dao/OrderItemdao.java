@@ -15,6 +15,7 @@ import com.example.myapp.data.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+@Repository
 public interface OrderItemdao {
     public int saveOrderItem(int order_id , int book_id , int amount , BigDecimal price) ;
 }

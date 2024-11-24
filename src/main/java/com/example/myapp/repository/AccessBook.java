@@ -107,14 +107,32 @@ public interface AccessBook extends JpaRepository<Book , Integer>{
     @Query(value = "select b from Book b where b.valid=1")
     Page<Book> findByPage(Pageable pageStatus) ; 
 
-    @Query(value = "select b from Book b where b.valid=1 and b.bookId=?1")
+    @Query(value = "select b from Book b where b.bookId=?1 and b.valid=1")
     Book findByBookId(int Book_Id) ; 
     
     @Modifying
     Book save(Book result) ; 
 
-    @Query(value = "select b from Book b where b.Name like %?1% and b.valid=1")
+    @Query(value = "select b from Book b where b.valid=1 and b.Name like %?1% ")
     Page<Book> SearchByName(String name ,Pageable pageStatus) ;
+
+    @Query(value = "select b from Book b where b.Price > ?1 and b.Storage > ?2 and b.valid = 1")
+    Page<Book> selectByPriceStorageUpper(double price , int storage , Pageable pageStatus) ;
+    
+    @Query(value = "select b from Book b where b.Price > ?1 and b.Storage < ?2 and b.valid = 1")
+    Page<Book> selectByPriceStorageLower(double price , int storage , Pageable pageStatus) ;
+
+    @Query(value = "select b from Book b where b.Price > ?1  and b.valid = 1")
+    Page<Book> selectByPriceUpper(double price , Pageable pageStatus) ;
+
+    @Query(value = "select b from Book b where b.Price < ?1  and b.valid = 1")
+    Page<Book> selectByPriceLower(double price , Pageable pageStatus) ;
+
+    @Query(value = "select b from Book b order by b.Price asc , b.Storage desc")
+    Page<Book> orderByPriceASC(Pageable pageStatus) ;
+
+    @Query(value = "select b from Book b order by b.Price desc , b.Storage desc")
+    Page<Book> orderByPriceDESC(Pageable pageStatus) ;
 
     @Modifying
     @Transactional

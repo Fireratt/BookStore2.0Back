@@ -1,8 +1,10 @@
 package com.example.myapp.serviceimpl ;
 
 import com.example.myapp.dao.Cartdao;
+import com.example.myapp.dao.OrderItemdao;
 import com.example.myapp.dao.Bookdao;
 import com.example.myapp.dao.Orderdao;
+import com.example.myapp.daoimpl.OrderItemDaoimpl;
 import com.example.myapp.dto.OrderStatistic_dto;
 import com.example.myapp.data.Cart;
 import com.example.myapp.utils.SessionUtils;
@@ -30,6 +32,8 @@ public class OrderServiceimpl implements OrderService
     Cartdao accessCart ; 
     @Autowired
     Bookdao accessBook ; 
+    @Autowired
+    OrderItemdao accessOrderItem ; 
     public Order_dto[] getList(HttpServletRequest request)
     {
         int user_id = SessionService.getUserId(request) ;
@@ -93,7 +97,7 @@ public class OrderServiceimpl implements OrderService
             for(int i = 0 ; i < itemNum ; i++)
             {
                 accessBook.updateStorage(items.get(i).getBook_id() , items.get(i).getAmount()) ; 
-                accessOrder.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount() ,items.get(i).getPrice()) ;  
+                accessOrderItem.saveOrderItem(orderId , items.get(i).getBook_id() , items.get(i).getAmount() ,items.get(i).getPrice()) ;  
                 accessCart.deleteByIds(user_id, items.get(i).getBook_id()) ; 
             }
             return true ; 

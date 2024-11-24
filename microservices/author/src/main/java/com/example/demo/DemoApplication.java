@@ -31,8 +31,8 @@ public class DemoApplication {
 	public String GetAuthor(@PathVariable("bookname") String bookName){
 		// if the book have been cached , it will have been added to ZSet
 		System.out.println("<Author-Service> Enter the Function");
-		Double bookId = redisTemplate.opsForZSet().score(ZSetNameKey,bookName) ; 
 		try{
+			Double bookId = redisTemplate.opsForZSet().score(ZSetNameKey,bookName) ; 
 			if(bookId != null){
 				Book book = (Book)JSON.parseObject((String)(redisTemplate.opsForValue().get(bookId.intValue())) , Book.class); 
 				return book.getAuthor() ;
@@ -47,7 +47,7 @@ public class DemoApplication {
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			return "Provided A False Author" ; 
+			return "无法在数据库中找到该书" ; 
 		}
 	}
 }

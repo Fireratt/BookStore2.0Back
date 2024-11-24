@@ -73,7 +73,7 @@ public class Order {
             currentPrice = currentPrice.substring(1 , currentPrice.length() -2) ; 
             System.out.println("<Order> Compute Price :" + currentPrice);
             totalPrice.add(new BigDecimal(currentPrice)) ; 
-            totalPrice.add(item.getPrice().multiply(new BigDecimal(item.getAmount()))) ; 
+            // totalPrice.add(item.getPrice().multiply(new BigDecimal(item.getAmount()))) ; 
         }
     }
     // append the orderItem ; recalculate the price

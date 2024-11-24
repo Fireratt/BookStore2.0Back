@@ -37,9 +37,13 @@ public class Bookdaoimpl implements Bookdao{
     public Bookdaoimpl(){
         // we will cache all the books in the redis first to improve the efficiency
     }
-    private void initializeBookZSet(){
-        if(redisTemplate.size(ZSetKey) == 0){
+    private boolean initializeBookZSet(){
+        if(redisTemplate.size(ZSetKey)== -1){   // redis dont connected 
+            return false ; 
+        }
+        if(redisTemplate.size(ZSetKey) == 0 ){
             // cache all the book 
+            System.out.println("<BookDao InitializeBookZSet>"+redisTemplate.size(ZSetKey));
             List<Book> booklist = accessBook.findall() ; 
             Iterator<Book> iter = booklist.iterator() ; 
             while(iter.hasNext()){
@@ -51,10 +55,13 @@ public class Bookdaoimpl implements Bookdao{
                 redisTemplate.addZSet(ZSetNameKey, book.getName(), book.getBookId());
             }
         }
+        return true ; 
     }
     public Page<Book> findByPage(Pageable pageStatus) 
     {
-        initializeBookZSet();
+        if(!initializeBookZSet()){  // redis dont connected
+            return accessBook.findByPage(pageStatus) ; 
+        }
         String[] list = redisTemplate.range(ZSetKey, pageStatus.getPageNumber() * pageStatus.getPageSize()
         , (pageStatus.getPageNumber() + 1) * pageStatus.getPageSize() -1).toArray(new String[0]) ; 
         Book[] booklist = new Book[list.length] ; 
@@ -92,8 +99,9 @@ public class Bookdaoimpl implements Bookdao{
 
     public Page<Book> SearchByName(String name, Pageable pageStatus)
     {
-        initializeBookZSet();
-        // create a regex for the name to be recognized 
+        if(!initializeBookZSet()){  // redis dont connected
+            return accessBook.SearchByName(name, pageStatus) ; 
+        }        // create a regex for the name to be recognized 
         String regex = "*" + name + "*" ; 
         Range<String> range = Range.closed(regex, regex) ; 
         ZScanResult result = redisTemplate.ZScanWithScore(ZSetNameKey, regex
