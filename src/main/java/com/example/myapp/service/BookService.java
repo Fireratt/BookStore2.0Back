@@ -29,5 +29,4 @@ public interface BookService {
     
     public Page<Book_Basic_dto> searchBook(String query ,Pageable pageStatus, HttpServletRequest request) ; 
 
-
 }

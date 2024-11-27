@@ -14,9 +14,11 @@ import com.example.myapp.BookList;
 import com.example.myapp.dao.Bookdao;
 import com.example.myapp.data.Book;
 import com.example.myapp.data.BookCover;
+import com.example.myapp.data.Tag;
 import com.example.myapp.dto.BookRank;
 import com.example.myapp.repository.AccessBook;
 import com.example.myapp.repository.AccessBookCover;
+import com.example.myapp.repository.AccessTag;
 import com.example.myapp.utils.PageUtils;
 import com.example.myapp.utils.RedisWrapper;
 import com.example.myapp.utils.RedisWrapper.ZScanResult;
@@ -37,7 +39,8 @@ public class Bookdaoimpl implements Bookdao{
     @Autowired
     private AccessBookCover accessCover ; 
 
-
+    @Autowired
+    private AccessTag accessTag ; 
     final String ZSetKey = "BookCache" ; 
     final String ZSetNameKey = "BookName" ; 
     // this function check if the book zset have been set . If not , set it ; or do nothing . 
@@ -93,13 +96,13 @@ public class Bookdaoimpl implements Bookdao{
             List<BookCover> covers = pageCover.toList() ; 
             int cnt = 0 ;
             Iterator<BookCover> coverIter = covers.iterator() ; 
-            while(coverIter.hasNext()){
-                try{
+            try{
+                while(coverIter.hasNext()){
                     pageBook.getContent().get(cnt++).setCover(coverIter.next().getBase64());
                 }
-                catch(IndexOutOfBoundsException e){
-                    System.out.println("<BookDaoImpl> The Index > pageBook's Content Size");
-                }
+            }
+            catch(IndexOutOfBoundsException e){
+                System.out.println("<BookDaoImpl> The Index > pageBook's Content Size");
             }
             return pageBook ; 
         }
@@ -299,4 +302,6 @@ public class Bookdaoimpl implements Bookdao{
             cnt ++ ; 
         }
     }
+
+
 }

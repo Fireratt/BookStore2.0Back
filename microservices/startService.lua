@@ -2,6 +2,7 @@
 local current_dir = io.popen("pwd"):read("*l")  
 os.execute("call start /min \"n\" startZooKeeper.sh")
 os.execute("net start mysql84")
+os.execute("net start mongodb")
 -- 遍历当前目录下的所有目录  
 local dirs = io.popen("ls -d */"):lines()  
 local processes = {}  

@@ -38,10 +38,10 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/bookcover
   neo4j :
-    uri : bolt://localhost:7687
+    uri : neo4j://localhost:7687
     authentication:
       username : neo4j
-      password : press-pandora-square-pigment-epoxy-2674
+      password : page-baby-forbid-student-average-6176
   datasource:
     url: jdbc:mysql://localhost:3306/bookdb
     username : root

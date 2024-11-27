@@ -96,23 +96,29 @@ public class RedisWrapper {
     }
     // will save the redis to mysql
     public void save(){
-        // first scan the dirty keys 
-        ScanOptions options= ScanOptions.scanOptions().match("*_dirty").build() ;
-        Cursor<String> cursor =  redisTemplate.scan(options) ; 
-        ArrayList<Book> toSave = new ArrayList<Book>() ; 
-        while(cursor.hasNext()){
-            String key = cursor.next() ; 
-            // dirty page need to write 
-            if(Integer.parseInt((String)(get(key))) == 1){
-                int location = key.indexOf("_", 0) ; 
-                String valueKeyString = key.substring(0, location-1) ; 
-                System.out.println("DirtyKey finded :" + valueKeyString) ; 
-                addDirtyBit(valueKeyString);
-                String content = (String)get(valueKeyString) ; 
-                toSave.add((Book)JSON.parseObject(content , Book.class)) ; 
+        try{
+            // first scan the dirty keys 
+            ScanOptions options= ScanOptions.scanOptions().match("*_dirty").build() ;
+            Cursor<String> cursor =  redisTemplate.scan(options) ; 
+            ArrayList<Book> toSave = new ArrayList<Book>() ; 
+            while(cursor.hasNext()){
+                String key = cursor.next() ; 
+                // dirty page need to write 
+                if(Integer.parseInt((String)(get(key))) == 1){
+                    int location = key.indexOf("_", 0) ; 
+                    String valueKeyString = key.substring(0, location-1) ; 
+                    System.out.println("DirtyKey finded :" + valueKeyString) ; 
+                    addDirtyBit(valueKeyString);
+                    String content = (String)get(valueKeyString) ; 
+                    toSave.add((Book)JSON.parseObject(content , Book.class)) ; 
+                }
             }
+            accessBook.saveAll(toSave) ; 
+        }catch(Exception e){
+            System.out.println("<Redis> Cant Connect to Redis , cant save it");
+            return ; 
         }
-        accessBook.saveAll(toSave) ; 
+
     }   
     // record if the data in the redis have been modified ;
     public void setDirty(String key){
