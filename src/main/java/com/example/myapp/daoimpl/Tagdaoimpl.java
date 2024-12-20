@@ -18,7 +18,7 @@ public class Tagdaoimpl implements Tagdao{
     @Autowired
     AccessTagNode accessTagNode ; 
     public int putTag(int tagId , int bookId){
-        if(accessTag.contains(tagId, bookId)){  // already exist
+        if(accessTag.contains(tagId, bookId).size() != 0){  // already exist
             return 0 ; 
         }
         return accessTag.saveTagEntry(tagId , bookId) ;
