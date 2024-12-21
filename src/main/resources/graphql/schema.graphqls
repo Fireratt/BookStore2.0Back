@@ -1,0 +1,25 @@
+type Query{
+    searchBook(str: String , pageIndex:Int):PageInfo
+}
+type PageInfo{
+    content:[Book]
+    totalElements:Int
+    totalPages:Int
+    first:Int
+    size:Int
+    number:Int
+    numberOfElements:Int
+    empty:Int
+    pageable :MyPageable
+}
+type Book{
+    bookId:Int
+    Name:String
+    Price:Int
+    cover:String
+}
+type MyPageable{
+    pageNumber :Int
+    pageSize:Int
+    offset:Int
+}

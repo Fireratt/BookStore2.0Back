@@ -1,5 +1,8 @@
 package com.example.myapp.controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import java.util.*;
 
 import com.example.myapp.BookList;
@@ -18,8 +21,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page; 
 
 import org.springframework.data.domain.Sort;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.data.domain.PageRequest;
-import jakarta.servlet.http.* ; 
+import jakarta.servlet.http.* ;
+import lombok.Data; 
 @RestController
 public class BookController {
     @Autowired 
@@ -64,6 +70,47 @@ public class BookController {
 
         return accessBook.searchBook(name,pageStatus, request) ; 
 	}
-
+	@QueryMapping
+	public PageInfo<Book_Basic_dto> searchBook(@Argument(name = "str") String string , @Argument(name = "pageIndex") int pageIndex){
+		Pageable pageStatus = PageRequest.of(pageIndex, PAGE_SIZE) ; 
+		System.out.println("<SearchBook> Controller Get String :" + string) ; 
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		return PageInfo.getPageInfo(accessBook.searchBook(string, pageStatus, request), this)  ; 
+	}
+	@Data
+	public class PageInfo<T>{
+		List<T> content ; 
+		int totalElements ;
+		int totalPages ;
+		int first ; 
+		int size ;
+		int number ; 
+		int numberOfElements ;
+		int empty ; 
+		MyPageable pageable ;
+		static <U> PageInfo<U> getPageInfo(Page<U> page , BookController parent){
+			PageInfo<U> pageRet = parent.new PageInfo<U>() ; 
+			pageRet.setContent(page.getContent()) ; 
+			pageRet.setFirst(Boolean.compare( false , page.isFirst()) );
+			pageRet.setSize(page.getSize());
+			pageRet.setNumber(page.getNumber());
+			pageRet.setEmpty(Boolean.compare(false, page.isEmpty()));
+			pageRet.setNumberOfElements(page.getNumberOfElements());
+			pageRet.setTotalElements((int)page.getTotalElements());
+			pageRet.setTotalPages(page.getTotalPages());
+			MyPageable pageable = parent.new MyPageable() ; 
+			pageable.setOffset((int)page.getPageable().getOffset());
+			pageable.setPageSize(page.getPageable().getPageSize());
+			pageable.setPageNumber(page.getPageable().getPageNumber());
+			pageRet.setPageable(pageable);
+			return pageRet ; 
+		}
+	}
+	@Data
+	public class MyPageable{
+		int pageNumber ;
+		int pageSize ;
+		int offset ;
+	}
 }
 

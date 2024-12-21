@@ -46,6 +46,9 @@ spring:
     url: jdbc:mysql://localhost:3306/bookdb
     username : root
     password : 123456
+  graphql:
+    graphiql:
+      enabled : true 
 eureka:
   instance:
     prefer-ip-address: true

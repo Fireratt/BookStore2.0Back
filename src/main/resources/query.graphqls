@@ -1,0 +1,21 @@
+query bookList ($str:String , $pageIndex:Int){
+  searchBook(str:$str , pageIndex:$pageIndex) {
+    content{
+      bookId 
+      Name 
+      Price 
+      cover
+    }
+    totalElements
+    totalPages
+    size
+    number
+    numberOfElements
+    empty
+    pageable{
+      pageNumber 
+      pageSize
+      offset
+    }
+  }
+}
