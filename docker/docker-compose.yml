@@ -12,6 +12,8 @@ services:
       - mysql_server
     volumes:  
       - ..:/home/main  
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     # network_mode: "bridge"
   mysql_server:  
     image: mysql:latest

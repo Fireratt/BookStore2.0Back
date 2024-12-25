@@ -27,23 +27,23 @@ spring:
   session :
     store-type : none
   kafka:
-    bootstrap-servers : localhost:9092
+    bootstrap-servers : http://host.docker.internal:9092
   data :
     redis: 
       database : 0
-      host : localhost 
+      host : host.docker.internal
       port : 6379
       timeout : 300
       password : 
     mongodb:
-      uri: mongodb://localhost:27017/bookcover
+      uri: mongodb://host.docker.internal:27017/bookcover
   neo4j :
-    uri : neo4j://localhost:7687
+    uri : neo4j://host.docker.internal:7687
     authentication:
       username : neo4j
       password : page-baby-forbid-student-average-6176
   datasource:
-    url: jdbc:mysql://localhost:3306/bookdb
+    url: jdbc:mysql://host.docker.internal:3306/bookdb
     username : root
     password : 123456
   graphql:
@@ -52,10 +52,10 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-    ip-address: localhost
+    ip-address: host.docker.internal
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://localhost:8040/eureka
+      defaultZone: http://host.docker.internal:8040/eureka
     eureka-service-url-poll-interval-seconds: 10
