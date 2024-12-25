@@ -1,0 +1,27 @@
+version: '3'  
+
+services:  
+
+  main_server:  
+    image: main
+    ports:  
+      - 7072:7072  
+    container_name: main_server  
+    privileged: true  
+    depends_on:
+      - mysql_server
+    volumes:  
+      - ..:/home/main  
+    # network_mode: "bridge"
+  mysql_server:  
+    image: mysql:latest
+    ports:  
+      - 3306:3306  
+    container_name: mysql_server  
+    privileged: true  
+    # network_mode: "bridge"
+    volumes:  
+      - E:\Work\[1]Semester4\WEB\MySQLData:/var/lib/mysql  
+    environment:  
+      MYSQL_ROOT_PASSWORD: 123456
+    entrypoint: mysqld --datadir="/var/lib/mysql/Data"

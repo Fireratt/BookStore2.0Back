@@ -1,0 +1,26 @@
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+dcd5e9136af1   23 minutes ago   WORKDIR /home/mysql                             0B        buildkit.dockerfile.v0
+<missing>      23 minutes ago   ENV MYSQL_ROOT_PASSWORD=123456                  0B        buildkit.dockerfile.v0
+<missing>      23 minutes ago   RUN /bin/sh -c chmod 777 /var/lib/mysql # bu…   0B        buildkit.dockerfile.v0
+<missing>      23 minutes ago   RUN /bin/sh -c chmod 777 /home/mysql # build…   0B        buildkit.dockerfile.v0
+<missing>      45 minutes ago   RUN /bin/sh -c mkdir -p /home/mysql/database…   0B        buildkit.dockerfile.v0
+<missing>      45 minutes ago   RUN /bin/sh -c mkdir -p /home/mysql # buildk…   0B        buildkit.dockerfile.v0
+<missing>      7 months ago     CMD ["mysqld"]                                  0B        buildkit.dockerfile.v0
+<missing>      7 months ago     EXPOSE map[3306/tcp:{} 33060/tcp:{}]            0B        buildkit.dockerfile.v0
+<missing>      7 months ago     ENTRYPOINT ["docker-entrypoint.sh"]             0B        buildkit.dockerfile.v0
+<missing>      7 months ago     COPY docker-entrypoint.sh /usr/local/bin/ # …   13.5kB    buildkit.dockerfile.v0
+<missing>      7 months ago     VOLUME [/var/lib/mysql]                         0B        buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eux;  microdnf install -…   317MB     buildkit.dockerfile.v0
+<missing>      7 months ago     ENV MYSQL_SHELL_VERSION=8.4.0-1.el8             0B        buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eu;  {   echo '[mysql-to…   219B      buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eux;  microdnf install -…   174MB     buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eu;  {   echo '[mysql8.4…   225B      buildkit.dockerfile.v0
+<missing>      7 months ago     ENV MYSQL_VERSION=8.4.0-1.el8                   0B        buildkit.dockerfile.v0
+<missing>      7 months ago     ENV MYSQL_MAJOR=8.4                             0B        buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eux;  key='BCA4 3417 C3B…   3.17kB    buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eux;  microdnf install -…   13.6MB    buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eux;  arch="$(uname -m)"…   2.36MB    buildkit.dockerfile.v0
+<missing>      7 months ago     ENV GOSU_VERSION=1.17                           0B        buildkit.dockerfile.v0
+<missing>      7 months ago     RUN /bin/sh -c set -eux;  groupadd --system …   2.77kB    buildkit.dockerfile.v0
+<missing>      8 months ago     /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B        
+<missing>      8 months ago     /bin/sh -c #(nop) ADD file:c53be7373aad45b6a…   116MB     

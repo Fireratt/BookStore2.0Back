@@ -1,0 +1,12 @@
+FROM mysql:8.4.0
+
+RUN mkdir -p /home/mysql
+RUN mkdir -p /home/mysql/database
+RUN chmod 777 -R /home/mysql
+RUN chmod 777 -R /var/lib/mysql
+ENV MYSQL_ROOT_PASSWORD=123456
+ENV DATABASE_ALREADY_EXISTS="1"
+COPY docker-entrypoint.sh /usr/local/bin
+COPY my.ini /etc/mysql/conf.d/my.cnf
+WORKDIR /home/mysql
+

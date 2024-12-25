@@ -1,0 +1,8 @@
+FROM openjdk:21-jdk-slim
+LABEL privileged=true
+RUN mkdir -p /home/main
+RUN chmod -R 777 /home/main
+
+WORKDIR /home/main
+
+ENTRYPOINT ["sh" , "-c" , "java -jar ./target/main-process-0.0.1-SNAPSHOT.jar"]

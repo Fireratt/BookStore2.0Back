@@ -1,0 +1,6 @@
+# please run this in the docker directory ; 
+docker run -p 7072:7072 --name main_server --privileged --mount type=bind,src="E:\Work\[1]Semester4\WEB\BackEnd\BackBookStore",target=/home/main main
+docker run -itd -p 3306:3306 --name mysql_server --privileged --mount type=bind,src="E:\Work\[1]Semester4\WEB\MySQLData",target=/var/lib/mysql mysql:latest
+docker build -f Dockerfile.mysql -t mysql .
+docker run -itd -p 3306:3306 --name mysql_server --privileged --mount type=bind,src="E:\Work\[1]Semester4\WEB\MySQLData",target=/var/lib/mysql --entrypoint bash mysql:latest
+docker run -itd -p 3306:3306 --name mysql_server --privileged mysql:latest
