@@ -1,0 +1,3 @@
+It is A android app developed by firerat with newest .net maui framework in android . Its main function is to type and render markdown.
+
+It is A android app developed by firerat with newest .net maui framework in android . Its main function is to type and render markdown.

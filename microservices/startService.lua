@@ -1,6 +1,6 @@
 -- 获取当前目录  
 local current_dir = io.popen("pwd"):read("*l")  
-os.execute("call start /min \"n\" startZooKeeper.sh")
+os.execute("call start /min \"n\" ./startZooKeeper.sh")
 os.execute("net start mysql84")
 os.execute("net start mongodb")
 -- 遍历当前目录下的所有目录  
@@ -21,4 +21,4 @@ processes[#processes + 1] = output
 local index = 1 
 print("Sleep to Wait ZooKeeper")
 os.execute("sleep 15")
-os.execute("call start /min \"n\" startKafka.sh")
+os.execute("call start /min \"n\" ./startKafka.sh")

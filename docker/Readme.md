@@ -39,7 +39,7 @@ lower_case_table_names=1
 bind-address=0.0.0.0
 ```
 
-### docker-compose.yml与bind-mount
+## docker-compose.yml与bind-mount
 
 使用docker-compose的配置来配置bind-mount。mysql的数据默认放在/var/lib/mysql，将本地的数据文件映射过去。
 

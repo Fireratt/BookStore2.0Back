@@ -16,7 +16,7 @@ import com.example.myapp.service.OrderService;
 import com.example.myapp.service.OrderService.StorageNotEnoughException;
 import com.example.myapp.utils.StringUtils;
 import com.example.myapp.websocket.WbServer;
-@Component
+// @Component
 public class OrderListener {
     @Autowired
     WbServer wbServer ; 
